@@ -1,0 +1,93 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { profile } from '../data/profile';
+
+const rows = [
+  { label: 'Email', value: profile.email, href: `mailto:${profile.email}`, ext: false },
+  { label: 'LinkedIn', value: 'linkedin.com/in/momen-yosri', href: profile.linkedin, ext: true },
+  { label: 'GitHub', value: 'github.com/Momen-Yosri', href: profile.github, ext: true },
+];
+---
+
+<section id="contact" class="section" aria-labelledby="contact-title">
+  <div class="container wrap">
+    <SectionHeading
+      eyebrow="Contact"
+      title="Let’s build something reliable."
+      lead="Open to conversations about mobile engineering, technical leadership and scalable Flutter products."
+      id="contact-title"
+    />
+    <ul class="rows" data-reveal>
+      {
+        rows.map((r) => (
+          <li>
+            <a href={r.href} {...(r.ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              <span class="k mono">{r.label}</span>
+              <span class="v">{r.value}</span>
+              <span class="arrow" aria-hidden="true">↗</span>
+              {r.ext && <span class="sr-only"> (opens in a new tab)</span>}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .wrap :global(.section-head) {
+    margin-bottom: 0;
+  }
+  .rows {
+    border-top: 1px solid var(--border);
+  }
+  .rows a {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.35rem 0.25rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    transition:
+      padding 0.25s var(--ease),
+      color 0.2s;
+  }
+  .rows a:hover {
+    text-decoration: none;
+    color: var(--accent-2);
+    padding-left: 0.75rem;
+  }
+  .k {
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .v {
+    font-size: 1.05rem;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 860px) {
+    .wrap {
+      grid-template-columns: 1fr;
+    }
+    .wrap :global(.section-head) {
+      margin-bottom: 0.5rem;
+    }
+  }
+  @media (max-width: 420px) {
+    .rows a {
+      grid-template-columns: 1fr auto;
+    }
+    .k {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

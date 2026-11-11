@@ -1,0 +1,231 @@
+---
+const apps = Array.from({ length: 8 }, (_, i) => `App ${String(i + 1).padStart(2, '0')}`);
+const contracts = [
+  { name: 'AppTenantConfig', note: 'Typed tenant identity' },
+  { name: 'AppColorScheme', note: 'Brand colours' },
+  { name: 'AppFeatureFlags', note: 'Per-tenant capabilities' },
+];
+const modules = [
+  { name: 'Networking', note: 'Dio client · tenant-aware auth' },
+  { name: 'State', note: 'Cubit-based features' },
+  { name: 'Routing', note: 'Reusable route table' },
+  { name: 'Shared UI', note: 'Cards, headers, sheets' },
+  { name: 'Payments', note: 'Multiple methods · wallet' },
+  { name: 'Media', note: 'Video · PDF · audio' },
+  { name: 'Exams & attendance', note: 'Results · QR · parents' },
+  { name: 'Firebase', note: 'FCM · Crashlytics · Performance' },
+  { name: 'Resilience', note: 'Offline · forced update' },
+];
+---
+
+<figure class="arch" aria-labelledby="arch-cap">
+  <div class="layer apps">
+    <p class="layer-title mono">Branded applications · 8 published</p>
+    <ul class="chips">
+      {apps.map((a) => <li class="mono">{a}</li>)}
+    </ul>
+    <p class="sub">Each one is a thin app created from the template application.</p>
+  </div>
+
+  <div class="link" aria-hidden="true"><span class="mono">provide typed configuration</span></div>
+
+  <div class="layer contracts">
+    <p class="layer-title mono">Configuration contracts</p>
+    <ul class="trio">
+      {
+        contracts.map((c) => (
+          <li>
+            <b class="mono">{c.name}</b>
+            <span>{c.note}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="link" aria-hidden="true"><span class="mono">consumed by the shared core</span></div>
+
+  <div class="layer core">
+    <p class="layer-title mono">tech_app_core · shared platform</p>
+    <div class="core-grid">
+      <ul class="mods">
+        {
+          modules.map((m) => (
+            <li>
+              <b>{m.name}</b>
+              <span>{m.note}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="sec">
+        <b>Security</b>
+        <span>Reference-counted screen protection · fail-closed gate</span>
+        <div class="native mono">Native Kotlin method channel<br />root · emulator · developer mode · ADB</div>
+      </div>
+    </div>
+  </div>
+
+  <figcaption id="arch-cap" class="cap">
+    Branded apps only supply configuration. All behaviour lives once, in the shared core.
+  </figcaption>
+</figure>
+
+<style>
+  .arch {
+    margin: 0;
+    padding: clamp(1rem, 3vw, 2rem);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: rgba(8, 24, 39, 0.55);
+  }
+  .layer {
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.25rem 1.25rem;
+    background: rgba(20, 46, 69, 0.7);
+  }
+  .core {
+    border-color: rgba(79, 195, 247, 0.5);
+    background: linear-gradient(180deg, rgba(2, 86, 155, 0.28), rgba(20, 46, 69, 0.7));
+  }
+  .layer-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 0.9rem;
+  }
+  .chips {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .chips li {
+    font-size: 0.72rem;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    background: rgba(8, 24, 39, 0.5);
+  }
+  .sub {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--text-3);
+  }
+  .link {
+    position: relative;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .link::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(var(--accent-2), rgba(79, 195, 247, 0.2));
+  }
+  .link::after {
+    content: '';
+    position: absolute;
+    left: calc(50% - 4px);
+    bottom: 2px;
+    width: 8px;
+    height: 8px;
+    border-right: 1px solid var(--accent-2);
+    border-bottom: 1px solid var(--accent-2);
+    transform: rotate(45deg);
+  }
+  .link span {
+    position: relative;
+    font-size: 0.7rem;
+    color: var(--text-2);
+    background: #0c2237;
+    padding: 0.2rem 0.65rem;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+  }
+  .trio {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .trio li,
+  .mods li,
+  .sec {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.8rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(8, 24, 39, 0.5);
+  }
+  .trio b {
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+  .trio span,
+  .mods span,
+  .sec > span {
+    font-size: 0.8rem;
+    color: var(--text-3);
+    line-height: 1.4;
+  }
+  .core-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  .mods {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .mods b,
+  .sec > b {
+    color: var(--text);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .sec {
+    border-color: rgba(79, 195, 247, 0.4);
+  }
+  .native {
+    margin-top: auto;
+    padding-top: 0.6rem;
+    font-size: 0.68rem;
+    line-height: 1.5;
+    color: var(--accent-2);
+  }
+  .cap {
+    margin-top: 1.25rem;
+    font-size: 0.88rem;
+    color: var(--text-3);
+  }
+  @media (max-width: 860px) {
+    .chips {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .core-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .trio,
+    .mods {
+      grid-template-columns: 1fr;
+    }
+    .layer {
+      padding: 1rem;
+    }
+  }
+</style>

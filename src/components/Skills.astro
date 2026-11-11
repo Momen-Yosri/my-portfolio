@@ -1,0 +1,61 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { skillGroups } from '../data/skills';
+---
+
+<section id="expertise" class="section" aria-labelledby="skills-title">
+  <div class="container">
+    <SectionHeading
+      eyebrow="Technical expertise"
+      title="Grouped by what they let me build."
+      lead="The technologies I use in production, organised by engineering concern."
+      id="skills-title"
+    />
+    <div class="grid">
+      {
+        skillGroups.map((g, i) => (
+          <section class="card group" data-reveal style={`--d:${(i % 3) * 70}ms`} aria-labelledby={`sg-${i}`}>
+            <h3 id={`sg-${i}`} class="mono">{g.title}</h3>
+            <ul class="tags">
+              {g.items.map((it) => <li class="tag">{it}</li>)}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .group {
+    padding: 1.4rem;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .group:hover {
+    border-color: var(--border-strong);
+  }
+  h3 {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 500;
+  }
+  @media (max-width: 960px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 620px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

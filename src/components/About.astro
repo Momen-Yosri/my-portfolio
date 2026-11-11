@@ -1,0 +1,42 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { profile } from '../data/profile';
+---
+
+<section id="about" class="section" aria-labelledby="about-title">
+  <div class="container wrap">
+    <SectionHeading eyebrow="About" title="Reusable systems over repeated work." id="about-title" />
+    <div class="body">
+      {profile.about.map((p, i) => <p data-reveal style={`--d:${i * 80}ms`}>{p}</p>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(1.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .wrap :global(.section-head) {
+    margin-bottom: 0;
+  }
+  .body {
+    display: grid;
+    gap: 1.25rem;
+    font-size: 1.08rem;
+    max-width: 40rem;
+  }
+  .body p:first-child {
+    color: var(--text);
+  }
+  @media (max-width: 860px) {
+    .wrap {
+      grid-template-columns: 1fr;
+    }
+    .wrap :global(.section-head) {
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>

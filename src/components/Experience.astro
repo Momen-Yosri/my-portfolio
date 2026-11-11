@@ -1,0 +1,108 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { experience } from '../data/experience';
+---
+
+<section id="experience" class="section" aria-labelledby="exp-title">
+  <div class="container">
+    <SectionHeading
+      eyebrow="Experience"
+      title="Leading mobile engineering, from planning to release."
+      id="exp-title"
+    />
+    <ol class="timeline">
+      {
+        experience.map((r, i) => (
+          <li class:list={['item', { current: r.current }]} data-reveal style={`--d:${i * 80}ms`}>
+            <span class="dot" aria-hidden="true" />
+            <div class="head">
+              <h3>
+                {r.title} <span class="org">· {r.org}</span>
+              </h3>
+              <p class="period mono">{r.period}</p>
+            </div>
+            <ul class="points">
+              {r.points.map((p) => <li>{p}</li>)}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.75rem;
+    position: relative;
+    max-width: 52rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    width: 1px;
+    background: linear-gradient(var(--accent-2), var(--border) 40%, var(--border));
+  }
+  .item {
+    position: relative;
+    padding-bottom: 3rem;
+  }
+  .item:last-child {
+    padding-bottom: 0;
+  }
+  .dot {
+    position: absolute;
+    left: calc(-1.75rem + 0px);
+    top: 0.5rem;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    border: 2px solid var(--text-3);
+  }
+  .current .dot {
+    border-color: var(--accent-2);
+    box-shadow: 0 0 0 4px rgba(79, 195, 247, 0.16);
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.25rem 1.5rem;
+  }
+  h3 {
+    font-size: 1.3rem;
+  }
+  .org {
+    color: var(--text-2);
+    font-weight: 500;
+  }
+  .period {
+    font-size: 0.8rem;
+    color: var(--accent-2);
+  }
+  .points {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .points li {
+    position: relative;
+    padding-left: 1.15rem;
+  }
+  .points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 6px;
+    height: 1px;
+    background: var(--accent-2);
+  }
+</style>

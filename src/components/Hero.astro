@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import profilePhoto from '../assets/profile.jpg';
+import { profile } from '../data/profile';
+---
+
+<section id="home" class="hero" aria-labelledby="hero-title">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="container inner">
+    <div class="copy">
+      <p class="eyebrow">{profile.role} · {profile.company}</p>
+      <h1 id="hero-title">{profile.headline}</h1>
+      <p class="lead">{profile.heroText}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#projects">View my work</a>
+        <a class="btn" href="#contact">Contact me</a>
+        <a class="btn" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </div>
+
+    <figure class="visual">
+      <div class="photo">
+        <Image
+          src={profilePhoto}
+          alt={`Portrait of ${profile.name}`}
+          widths={[320, 480, 640]}
+          sizes="(max-width: 900px) 80vw, 420px"
+          format="webp"
+          quality={78}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <figcaption class="panel mono">
+        <div><span>role</span><b>{profile.role}</b></div>
+        <div><span>company</span><b>{profile.company}</b></div>
+        <div><span>focus</span><b>{profile.focus}</b></div>
+        <div><span>location</span><b>{profile.location}</b></div>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(3rem, 8vw, 6rem) clamp(4rem, 9vw, 7rem);
+    overflow: hidden;
+  }
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201, 214, 227, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 214, 227, 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 70% at 70% 30%, #000 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 70% 30%, #000 20%, transparent 75%);
+    pointer-events: none;
+  }
+  .inner {
+    position: relative;
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: center;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  }
+  h1 {
+    margin-top: 1.25rem;
+    font-size: clamp(2.5rem, 6.4vw, 4.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    max-width: 14ch;
+  }
+  .lead {
+    margin-top: 1.5rem;
+    max-width: 38rem;
+    font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+  }
+  .actions {
+    margin-top: 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .visual {
+    margin: 0;
+    position: relative;
+    max-width: 420px;
+    justify-self: end;
+    width: 100%;
+  }
+  .photo {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+  }
+  .photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+  .panel {
+    margin: -3.25rem 1rem 0;
+    position: relative;
+    padding: 0.9rem 1rem;
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.76rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: rgba(8, 24, 39, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .panel div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .panel span {
+    color: var(--text-3);
+  }
+  .panel b {
+    color: var(--text);
+    font-weight: 500;
+    text-align: right;
+  }
+  @media (max-width: 900px) {
+    .inner {
+      grid-template-columns: 1fr;
+    }
+    .visual {
+      justify-self: start;
+      max-width: 380px;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .copy > *,
+    .visual {
+      animation: rise 0.8s var(--ease) both;
+    }
+    .copy > :nth-child(2) {
+      animation-delay: 0.08s;
+    }
+    .copy > :nth-child(3) {
+      animation-delay: 0.16s;
+    }
+    .copy > :nth-child(4) {
+      animation-delay: 0.24s;
+    }
+    .visual {
+      animation-delay: 0.2s;
+    }
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+    }
+  }
+</style>

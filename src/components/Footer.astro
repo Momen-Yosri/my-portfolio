@@ -1,0 +1,36 @@
+---
+import { profile } from '../data/profile';
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="container row">
+    <p>© {year} {profile.name}. Built with Astro.</p>
+    <ul>
+      <li><a href={profile.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn</a></li>
+      <li><a href={profile.github} rel="noopener noreferrer" target="_blank">GitHub</a></li>
+      <li><a href={`mailto:${profile.email}`}>Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    border-top: 1px solid var(--border);
+    padding-block: 2rem;
+    font-size: 0.88rem;
+    color: var(--text-3);
+    background: rgba(8, 24, 39, 0.6);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+  ul {
+    display: flex;
+    gap: 1.5rem;
+  }
+</style>

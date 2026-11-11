@@ -1,0 +1,194 @@
+---
+import type { Project } from '../data/projects';
+import { u } from '../utils';
+
+interface Props {
+  project: Project;
+  index: number;
+  wide?: boolean;
+}
+const { project, index, wide = false } = Astro.props;
+const num = String(index + 1).padStart(2, '0');
+---
+
+<article class:list={['card pcard', { wide }]} data-reveal style={`--d:${(index % 2) * 80}ms`}>
+  <div class="cover" aria-hidden="true">
+    <span class="num mono">{num}</span>
+    <span class="cat mono">{project.category}</span>
+  </div>
+  <div class="body">
+    <p class="platform mono">{project.platform}</p>
+    <h3>
+      <a class="stretch" href={u(`projects/${project.slug}/`)}>{project.name}</a>
+    </h3>
+    <p class="short">{project.short}</p>
+    <ul class="tags" aria-label="Technology">
+      {project.stack.slice(0, wide ? 7 : 5).map((s) => <li class="tag">{s}</li>)}
+    </ul>
+    <div class="foot">
+      <span class="more">Read case study <span aria-hidden="true">→</span></span>
+      <span class="stores">
+        {
+          project.links.appStore && (
+            <a class="store" href={project.links.appStore} target="_blank" rel="noopener noreferrer">
+              App Store<span class="sr-only"> (opens in a new tab) for {project.name}</span>
+            </a>
+          )
+        }
+        {
+          project.links.playStore && (
+            <a class="store" href={project.links.playStore} target="_blank" rel="noopener noreferrer">
+              Google Play<span class="sr-only"> (opens in a new tab) for {project.name}</span>
+            </a>
+          )
+        }
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+  }
+  .pcard:hover,
+  .pcard:focus-within {
+    border-color: rgba(79, 195, 247, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 24px 48px -28px rgba(2, 86, 155, 0.9);
+  }
+  .cover {
+    position: relative;
+    height: 150px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background:
+      linear-gradient(rgba(201, 214, 227, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(90deg, rgba(201, 214, 227, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+      radial-gradient(120% 140% at 100% 0%, rgba(2, 86, 155, 0.75), rgba(8, 24, 39, 0.1) 70%);
+    border-bottom: 1px solid var(--border);
+  }
+  .wide .cover {
+    height: 190px;
+  }
+  .num {
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.04em;
+  }
+  .cat {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    padding: 0.25rem 0.55rem;
+    border: 1px solid rgba(79, 195, 247, 0.35);
+    border-radius: 6px;
+    background: rgba(8, 24, 39, 0.5);
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    flex: 1;
+  }
+  .platform {
+    font-size: 0.72rem;
+    color: var(--text-3);
+  }
+  h3 {
+    font-size: 1.4rem;
+  }
+  .stretch {
+    color: var(--text);
+  }
+  .stretch:hover {
+    text-decoration: none;
+  }
+  .stretch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .short {
+    color: var(--text-2);
+  }
+  .tags {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.88rem;
+  }
+  .more {
+    color: var(--text);
+    font-weight: 550;
+    transition: color 0.2s;
+  }
+  .more span {
+    display: inline-block;
+    transition: transform 0.25s var(--ease);
+  }
+  .pcard:hover .more {
+    color: var(--accent-2);
+  }
+  .pcard:hover .more span {
+    transform: translateX(4px);
+  }
+  .stores {
+    display: flex;
+    gap: 0.9rem;
+    position: relative;
+    z-index: 2;
+  }
+  .store {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    padding-block: 0.4rem;
+  }
+
+  @media (min-width: 900px) {
+    .wide {
+      flex-direction: row;
+    }
+    .wide .cover {
+      width: 38%;
+      height: auto;
+      min-height: 100%;
+      border-bottom: 0;
+      border-right: 1px solid var(--border);
+      align-items: flex-start;
+    }
+    .wide .num {
+      font-size: 4rem;
+    }
+    .wide .body {
+      padding: 2rem 2.25rem;
+    }
+    .wide h3 {
+      font-size: 1.9rem;
+    }
+    .wide .short {
+      font-size: 1.1rem;
+      max-width: 36rem;
+    }
+  }
+</style>

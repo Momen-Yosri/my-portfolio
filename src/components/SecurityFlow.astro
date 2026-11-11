@@ -1,0 +1,107 @@
+---
+const steps = [
+  {
+    n: '01',
+    title: 'A protected screen opens',
+    body: 'It acquires a protection token. Tokens are reference-counted, so replacing or stacking screens never leaves an unprotected gap, and the last release switches protection off.',
+  },
+  {
+    n: '02',
+    title: 'Protection is applied',
+    body: 'Android: FLAG_SECURE. iOS: a secure capture layer, plus detection of active recording or mirroring. Work runs through a single serialized queue and is re-asserted on lifecycle and configuration changes.',
+  },
+  {
+    n: '03',
+    title: 'The gate decides',
+    body: 'Content renders only when protection is confirmed. Failed, pending or unsupported states keep it hidden. The gate fails closed and never falls back to an unprotected display.',
+  },
+];
+const checks = ['Root / jailbreak', 'Emulator', 'Developer mode', 'ADB'];
+---
+
+<div class="flow">
+  <ol class="steps">
+    {
+      steps.map((s) => (
+        <li>
+          <span class="n mono">{s.n}</span>
+          <h4>{s.title}</h4>
+          <p>{s.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="checks">
+    <p class="mono t">Device integrity checks</p>
+    <ul class="tags">
+      {checks.map((c) => <li class="tag">{c}</li>)}
+    </ul>
+    <p class="note">Developer-mode and ADB checks run through a native Kotlin method channel.</p>
+  </div>
+</div>
+
+<style>
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    counter-reset: s;
+  }
+  .steps li {
+    position: relative;
+    padding: 1.4rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: rgba(20, 46, 69, 0.6);
+  }
+  .steps li:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -0.95rem;
+    top: 1.3rem;
+    z-index: 1;
+    color: var(--accent-2);
+    font-size: 0.9rem;
+  }
+  .n {
+    font-size: 0.75rem;
+    color: var(--accent-2);
+  }
+  h4 {
+    margin: 0.5rem 0;
+    font-size: 1.05rem;
+  }
+  .steps p {
+    font-size: 0.92rem;
+  }
+  .checks {
+    margin-top: 1rem;
+    padding: 1.25rem 1.4rem;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    display: grid;
+    gap: 0.75rem;
+  }
+  .t {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .note {
+    font-size: 0.88rem;
+    color: var(--text-3);
+  }
+  @media (max-width: 860px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+    .steps li:not(:last-child)::after {
+      content: '↓';
+      right: auto;
+      left: 1.4rem;
+      top: auto;
+      bottom: -1.05rem;
+    }
+  }
+</style>

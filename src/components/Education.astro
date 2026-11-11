@@ -1,0 +1,110 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { education, certifications } from '../data/education';
+import { career } from '../data/profile';
+---
+
+<section id="education" class="section" aria-labelledby="edu-title">
+  <div class="container">
+    <SectionHeading eyebrow="Education & certifications" title="Foundations and continuous learning." id="edu-title" />
+    <div class="grid">
+      <div class="card block" data-reveal>
+        <h3 class="mono label">Education</h3>
+        <p class="school">{education.school}</p>
+        <p>{education.faculty}</p>
+        <p class="degree">{education.degree}</p>
+      </div>
+      <div class="card block" data-reveal style="--d: 80ms">
+        <h3 class="mono label">Certifications</h3>
+        <ul class="certs">
+          {
+            certifications.map((c) => (
+              <li>
+                <span class="t">{c.title}</span>
+                <span class="m">
+                  {[c.issuer, c.detail, c.date].filter(Boolean).join(' · ')}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="career" data-reveal>
+      <span class="eyebrow">Career direction</span>
+      <h3>{career.title}</h3>
+      <p>{career.text}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .block {
+    padding: 1.75rem;
+  }
+  .label {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .school {
+    font-size: 1.5rem;
+    color: var(--text);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .degree {
+    margin-top: 0.75rem;
+    color: var(--text);
+  }
+  .certs {
+    display: grid;
+    gap: 1rem;
+  }
+  .certs li {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .certs li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .t {
+    color: var(--text);
+    font-weight: 560;
+  }
+  .m {
+    font-size: 0.88rem;
+    color: var(--text-3);
+  }
+  .career {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    max-width: 52rem;
+  }
+  .career h3 {
+    margin-top: 0.75rem;
+    font-size: 1.5rem;
+  }
+  .career p {
+    margin-top: 0.75rem;
+  }
+  @media (max-width: 800px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

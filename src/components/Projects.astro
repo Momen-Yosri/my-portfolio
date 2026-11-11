@@ -1,0 +1,83 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import ProjectCard from './ProjectCard.astro';
+import { projects, moreProjects } from '../data/projects';
+---
+
+<section id="projects" class="section" aria-labelledby="proj-title">
+  <div class="container">
+    <SectionHeading
+      eyebrow="Featured projects"
+      title="Products shipped to the App Store and Google Play."
+      lead="Five case studies covering platform architecture, university learning, offline-first tooling and production maintenance."
+      id="proj-title"
+    />
+    <div class="grid">
+      {projects.map((p, i) => <ProjectCard project={p} index={i} wide={i === 0} />)}
+    </div>
+
+    <div class="more" data-reveal>
+      <h3 class="mono">Also worked on</h3>
+      <ul class="more-grid">
+        {
+          moreProjects.map((m) => (
+            <li>
+              <h4>{m.name}</h4>
+              <p>{m.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+  }
+  .grid > :global(:first-child) {
+    grid-column: 1 / -1;
+  }
+  .more {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+  .more h3 {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+  }
+  .more-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--border);
+  }
+  .more-grid li {
+    padding: 1.5rem 1.5rem 0.5rem 0;
+  }
+  .more-grid h4 {
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
+  }
+  .more-grid p {
+    font-size: 0.92rem;
+  }
+  @media (max-width: 1000px) {
+    .more-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 700px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .more-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

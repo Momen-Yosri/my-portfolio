@@ -1,0 +1,364 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArchitectureDiagram from '../../components/ArchitectureDiagram.astro';
+import SecurityFlow from '../../components/SecurityFlow.astro';
+import { projects } from '../../data/projects';
+import { u } from '../../utils';
+
+export const getStaticPaths = (() =>
+  projects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: {
+      project,
+      prev: projects[(i - 1 + projects.length) % projects.length],
+      next: projects[(i + 1) % projects.length],
+      index: i,
+    },
+  }))) satisfies GetStaticPaths;
+
+const { project: p, prev, next } = Astro.props;
+const isPlatform = p.slug === 'white-label-academy-platform';
+const meta = [
+  { k: 'Role', v: p.role },
+  { k: 'Platform', v: p.platform },
+  ...(p.timeline ? [{ k: 'Timeline', v: p.timeline }] : []),
+  ...(p.credits ? [{ k: 'Team', v: p.credits.replace(/^Backend engineers: /, 'Backend: ') }] : []),
+];
+---
+
+<BaseLayout
+  title={`${p.name} case study | Mo'men Yosri`}
+  description={`${p.short} ${p.outcome}`.slice(0, 300)}
+  type="article"
+>
+  <article>
+    <header class="top">
+      <div class="container">
+        <nav class="crumbs mono" aria-label="Breadcrumb">
+          <a href={u('')}>Portfolio</a><span aria-hidden="true">/</span>
+          <a href={u('#projects')}>Projects</a><span aria-hidden="true">/</span>
+          <span aria-current="page">{p.name}</span>
+        </nav>
+        <p class="eyebrow">{p.category}</p>
+        <h1>{p.name}</h1>
+        <p class="lede">{p.short}</p>
+        <div class="stores">
+          {
+            p.links.appStore && (
+              <a class="btn btn-primary" href={p.links.appStore} target="_blank" rel="noopener noreferrer">
+                {isPlatform ? 'Reference app: Golden Academy' : 'App Store'}
+                <span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            )
+          }
+          {
+            p.links.playStore && (
+              <a class="btn" href={p.links.playStore} target="_blank" rel="noopener noreferrer">
+                Google Play<span class="sr-only"> (opens in a new tab)</span>
+              </a>
+            )
+          }
+        </div>
+        <dl class="meta">
+          {
+            meta.map((m) => (
+              <div>
+                <dt class="mono">{m.k}</dt>
+                <dd>{m.v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </header>
+
+    <div class="container prose">
+      <section class="two" aria-labelledby="problem">
+        <div data-reveal>
+          <h2 id="problem" class="mono h">Problem</h2>
+          <p>{p.problem}</p>
+        </div>
+        <div data-reveal style="--d: 80ms">
+          <h2 class="mono h">Solution</h2>
+          <p>{p.solution}</p>
+        </div>
+      </section>
+
+      {
+        isPlatform && (
+          <section aria-labelledby="arch" data-reveal>
+            <h2 id="arch" class="mono h">Architecture</h2>
+            <p class="intro">
+              How the shared platform, the configuration contracts and the branded apps connect.
+            </p>
+            <ArchitectureDiagram />
+          </section>
+        )
+      }
+
+      <section aria-labelledby="decisions">
+        <h2 id="decisions" class="mono h">Engineering decisions</h2>
+        <div class="decisions">
+          {
+            p.decisions.map((d, i) => (
+              <div class="card dec" data-reveal style={`--d:${(i % 2) * 70}ms`}>
+                <h3>{d.title}</h3>
+                <p>{d.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      {
+        isPlatform && (
+          <section aria-labelledby="security" data-reveal>
+            <h2 id="security" class="mono h">Content protection</h2>
+            <p class="intro">
+              Paid learning content must not leak. The protection layer is built to fail closed.
+            </p>
+            <SecurityFlow />
+          </section>
+        )
+      }
+
+      <section aria-labelledby="features">
+        <h2 id="features" class="mono h">Main features</h2>
+        <div class="fgroups">
+          {
+            p.featureGroups.map((g) => (
+              <div data-reveal>
+                <h3>{g.title}</h3>
+                <ul class="flist">
+                  {g.items.map((f) => <li>{f}</li>)}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="two" aria-labelledby="stack">
+        <div data-reveal>
+          <h2 id="stack" class="mono h">Technology</h2>
+          <ul class="tags">{p.stack.map((s) => <li class="tag">{s}</li>)}</ul>
+        </div>
+        <div data-reveal style="--d: 80ms">
+          <h2 class="mono h">Outcome</h2>
+          <p>{p.outcome}</p>
+          {p.linkNote && <p class="small">{p.linkNote}</p>}
+          {p.notes?.map((n) => <p class="small">{n}</p>)}
+        </div>
+      </section>
+
+      {
+        p.screenshots && p.screenshots.length > 0 && (
+          <section aria-labelledby="shots">
+            <h2 id="shots" class="mono h">Screens</h2>
+            <div class="shots">
+              {p.screenshots.map((s) => (
+                <img src={s.src} alt={s.alt} loading="lazy" />
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </div>
+
+    <nav class="pager" aria-label="More case studies">
+      <div class="container pager-in">
+        <a class="pg" href={u(`projects/${prev.slug}/`)} rel="prev">
+          <span class="mono">← Previous</span>
+          <b>{prev.name}</b>
+        </a>
+        <a class="pg end" href={u('#projects')}>
+          <span class="mono">All projects</span>
+          <b>Back to portfolio</b>
+        </a>
+        <a class="pg end" href={u(`projects/${next.slug}/`)} rel="next">
+          <span class="mono">Next →</span>
+          <b>{next.name}</b>
+        </a>
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .top {
+    padding-block: clamp(2rem, 5vw, 4rem) clamp(2rem, 5vw, 3.5rem);
+    border-bottom: 1px solid var(--border);
+  }
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.76rem;
+    color: var(--text-3);
+    margin-bottom: 2.5rem;
+  }
+  .crumbs a {
+    color: var(--text-2);
+  }
+  h1 {
+    margin-top: 1rem;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+  .lede {
+    margin-top: 1.25rem;
+    max-width: 42rem;
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  }
+  .stores {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .meta {
+    margin: 2.5rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    border-top: 1px solid var(--border);
+  }
+  .meta div {
+    padding: 1.1rem 1.25rem 0 0;
+  }
+  .meta dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .meta dd {
+    margin: 0.35rem 0 0;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+  .prose {
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    display: grid;
+    gap: clamp(3rem, 7vw, 5.5rem);
+  }
+  .h {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.5rem, 5vw, 4rem);
+  }
+  .two p {
+    font-size: 1.08rem;
+  }
+  .small {
+    margin-top: 0.75rem;
+    font-size: 0.9rem !important;
+    color: var(--text-3);
+  }
+  .intro {
+    max-width: 40rem;
+    margin-bottom: 1.5rem;
+  }
+  .decisions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .dec {
+    padding: 1.5rem;
+  }
+  .dec h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  .dec p {
+    font-size: 0.95rem;
+  }
+  .fgroups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+  .fgroups h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.85rem;
+  }
+  .flist {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .flist li {
+    position: relative;
+    padding: 0 0 0.55rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .flist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 6px;
+    height: 1px;
+    background: var(--accent-2);
+  }
+  .shots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .pager {
+    border-top: 1px solid var(--border);
+    background: rgba(8, 24, 39, 0.45);
+  }
+  .pager-in {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .pg {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 2rem 1rem 2rem 0;
+    color: var(--text);
+  }
+  .pg.end {
+    padding-left: 1rem;
+    border-left: 1px solid var(--border);
+    text-align: right;
+    align-items: flex-end;
+  }
+  .pg:hover {
+    text-decoration: none;
+    color: var(--accent-2);
+  }
+  .pg span {
+    font-size: 0.74rem;
+    color: var(--text-3);
+  }
+  @media (max-width: 820px) {
+    .two,
+    .decisions {
+      grid-template-columns: 1fr;
+    }
+    .pager-in {
+      grid-template-columns: 1fr;
+    }
+    .pg,
+    .pg.end {
+      padding: 1.25rem 0;
+      text-align: left;
+      align-items: flex-start;
+      border-left: 0;
+      border-bottom: 1px solid var(--border);
+    }
+  }
+</style>
