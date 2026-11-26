@@ -1,12 +1,14 @@
 export const profile = {
   name: "Mo'men Yosri",
-  monogram: 'MY',
   role: 'Team Lead, Mobile Engineering',
   company: 'EduLens',
-  // TODO(confirm): location is not stated in the brief. "Egypt" is inferred from education; confirm city.
-  location: 'Egypt',
+  location: 'Cairo, Egypt',
+  cv: 'Momen-Yosri-CV.pdf', // file in public/
   focus: 'Flutter & Mobile Engineering',
   email: 'momen.yosri@gmail.com',
+  phone: '+201111785669',
+  phoneDisplay: '+20 111 178 5669',
+  whatsapp: 'https://wa.me/201111785669',
   linkedin: 'https://www.linkedin.com/in/momen-yosri',
   github: 'https://github.com/Momen-Yosri',
   siteUrl: 'https://momen-yosri.github.io/my-portfolio/',

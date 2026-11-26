@@ -4,6 +4,7 @@ import '@fontsource-variable/jetbrains-mono';
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
 import { u } from '../utils';
 import { profile } from '../data/profile';
 
@@ -65,6 +66,7 @@ const jsonLd = JSON.stringify({
       <slot />
     </main>
     <Footer />
+    <WhatsAppButton />
     <script>
       import '../scripts/site';
     </script>
