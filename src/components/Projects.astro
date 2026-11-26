@@ -2,10 +2,9 @@
 import SectionHeading from './SectionHeading.astro';
 import ProjectCard from './ProjectCard.astro';
 import PlatformCard from './PlatformCard.astro';
-import ScreenGallery from './ScreenGallery.astro';
-import { screens } from '../data/screens';
-import { u } from '../utils';
-import { projects, moreProjects } from '../data/projects';
+import QanoniSpotlight from './QanoniSpotlight.astro';
+import AlsoWorkedOn from './AlsoWorkedOn.astro';
+import { projects } from '../data/projects';
 ---
 
 <section id="projects" class="section" aria-labelledby="proj-title">
@@ -20,47 +19,19 @@ import { projects, moreProjects } from '../data/projects';
       {projects.map((p, i) => (i === 0 ? <PlatformCard project={p} /> : <ProjectCard project={p} index={i} />))}
     </div>
 
-    <div class="more" data-reveal>
-      <h3 class="mono">Qanoni, a closer look</h3>
-      <ScreenGallery
-        shots={screens.qanoni}
-        video={{ src: 'screens/qanoni/splash', label: 'Qanoni splash screen' }}
-        label="Qanoni splash screen and screenshots"
-      />
-    </div>
-
-    <div class="more" data-reveal>
-      <h3 class="mono">Also worked on</h3>
-      <ul class="more-grid">
-        {
-          moreProjects.map((m) => (
-            <li>
-              {m.logo && <img class="more-logo" src={u(m.logo)} alt="" width="48" height="48" loading="lazy" />}
-              <h4>{m.name}</h4>
-              <p>{m.text}</p>
-              {m.links && (
-                <p class="more-links mono">
-                {m.links?.appStore && (
-                <a href={m.links.appStore} target="_blank" rel="noopener noreferrer">
-                  App Store<span class="sr-only"> (opens in a new tab) for {m.name}</span>
-                </a>
-              )}
-                {m.links?.playStore && (
-                <a href={m.links.playStore} target="_blank" rel="noopener noreferrer">
-                  Google Play<span class="sr-only"> (opens in a new tab) for {m.name}</span>
-                </a>
-              )}
-                </p>
-              )}
-            </li>
-          ))
-        }
-      </ul>
+    <div class="extra">
+      <QanoniSpotlight />
+      <AlsoWorkedOn />
     </div>
   </div>
 </section>
 
 <style>
+  .extra {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  }
   .grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -69,55 +40,8 @@ import { projects, moreProjects } from '../data/projects';
   .grid > :global(:first-child) {
     grid-column: 1 / -1;
   }
-  .more {
-    margin-top: clamp(2rem, 4vw, 3rem);
-  }
-  .more h3 {
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-3);
-    font-weight: 500;
-    margin-bottom: 1.25rem;
-  }
-  .more-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    border-top: 1px solid var(--border);
-  }
-  .more-grid li {
-    padding: 1.5rem 1.5rem 0.5rem 0;
-  }
-  .more-logo {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 0.75rem;
-    border-radius: 23%;
-    border: 1px solid var(--border-strong);
-  }
-  .more-grid h4 {
-    font-size: 1.05rem;
-    margin-bottom: 0.4rem;
-  }
-  .more-grid p {
-    font-size: 0.92rem;
-  }
-  .more-grid .more-links {
-    display: flex;
-    gap: 0.9rem;
-    margin-top: 0.6rem;
-    font-size: 0.76rem;
-  }
-  @media (max-width: 1000px) {
-    .more-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
   @media (max-width: 700px) {
     .grid {
-      grid-template-columns: 1fr;
-    }
-    .more-grid {
       grid-template-columns: 1fr;
     }
   }

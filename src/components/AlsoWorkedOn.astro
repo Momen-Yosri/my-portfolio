@@ -1,0 +1,166 @@
+---
+import { moreProjects } from '../data/projects';
+import { brandedApps } from '../data/apps';
+import { u } from '../utils';
+
+// Qanoni has its own spotlight above.
+const items = moreProjects
+  .filter((m) => m.name !== 'Qanoni')
+  .map((m) => {
+    const branded = brandedApps.find((a) => a.name === m.name);
+    const isGroup = m.name === 'Branded academy apps';
+    return {
+      ...m,
+      // an app shown in the showcase reuses its splash art and store links
+      art: branded ? u(`apps/${branded.slug}.webp`) : undefined,
+      glow: branded?.glow ?? (isGroup ? '#4ff0bb' : '#ffc561'),
+      links: m.links ?? branded?.links,
+      stack: isGroup ? brandedApps.slice(0, 5).map((a) => u(`apps/${a.slug}.webp`)) : undefined,
+      more: brandedApps.length - 5,
+    };
+  });
+---
+
+<div class="also" data-reveal>
+  <h3 class="label mono">Also worked on</h3>
+  <ul class="list">
+    {
+      items.map((m) => (
+        <li class="card item" style={`--g:${m.glow}`}>
+          <div class="media" aria-hidden="true">
+            {m.art && <img class="icon" src={m.art} alt="" width="64" height="64" loading="lazy" />}
+            {m.stack && (
+              <span class="stack">
+                {m.stack.map((s) => (
+                  <img src={s} alt="" width="44" height="44" loading="lazy" />
+                ))}
+                <b class="mono">+{m.more}</b>
+              </span>
+            )}
+            {!m.art && !m.stack && <span class="icon mono">{m.name.slice(0, 2).toUpperCase()}</span>}
+          </div>
+          <h4>{m.name}</h4>
+          <p>{m.text}</p>
+          <p class="links mono">
+            {m.stack && <a href="#apps">See them all →</a>}
+            {m.links?.appStore && (
+              <a href={m.links.appStore} target="_blank" rel="noopener noreferrer">
+                App Store<span class="sr-only"> (opens in a new tab) for {m.name}</span>
+              </a>
+            )}
+            {m.links?.playStore && (
+              <a href={m.links.playStore} target="_blank" rel="noopener noreferrer">
+                Google Play<span class="sr-only"> (opens in a new tab) for {m.name}</span>
+              </a>
+            )}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    overflow: hidden;
+    transition:
+      translate 0.3s var(--ease),
+      border-color 0.3s;
+  }
+  .item:hover {
+    translate: 0 -5px;
+    border-color: var(--g);
+  }
+  .media {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    margin-bottom: 0.5rem;
+  }
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    object-position: 50% 42%;
+    border-radius: 23%;
+    border: 1px solid var(--border-strong);
+    background: color-mix(in srgb, var(--g) 16%, transparent);
+    color: var(--g);
+    font-weight: 700;
+    box-shadow: 0 10px 30px -12px var(--g);
+  }
+  .stack {
+    display: flex;
+    align-items: center;
+  }
+  .stack img,
+  .stack b {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    object-fit: cover;
+  }
+  .stack img + img,
+  .stack b {
+    margin-left: -12px;
+  }
+  .stack b {
+    position: relative;
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    color: #04140e;
+    font-size: 0.8rem;
+  }
+  h4 {
+    font-size: 1.15rem;
+  }
+  p {
+    font-size: 0.92rem;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.76rem;
+  }
+  .links:empty {
+    display: none;
+  }
+  @media (max-width: 860px) {
+    .list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

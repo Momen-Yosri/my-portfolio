@@ -1,0 +1,186 @@
+---
+import { moreProjects } from '../data/projects';
+import { screens } from '../data/screens';
+import { u } from '../utils';
+
+const app = moreProjects.find((m) => m.name === 'Qanoni')!;
+// two screens either side of the splash: [far left, left, right, far right]
+const [welcome, year, subjects, course] = screens.qanoni;
+const left = [welcome, year];
+const right = [subjects, course];
+const highlights = ['Study-year paths', 'Subjects', 'Notes & question bank', 'In-app store'];
+---
+
+<article class="spotlight" data-reveal aria-labelledby="qanoni-title">
+  <div class="info">
+    {app.logo && <img class="logo" src={u(app.logo)} alt="" width="60" height="60" loading="lazy" />}
+    <p class="kicker mono">Spotlight</p>
+    <h3 id="qanoni-title">{app.name}</h3>
+    <p class="text">{app.text}</p>
+    <ul class="chips mono">
+      {highlights.map((h) => <li>{h}</li>)}
+    </ul>
+    <div class="links">
+      {
+        app.links?.appStore && (
+          <a class="btn btn-sm" href={app.links.appStore} target="_blank" rel="noopener noreferrer">
+            App Store<span class="sr-only"> (opens in a new tab) for {app.name}</span>
+          </a>
+        )
+      }
+      {
+        app.links?.playStore && (
+          <a class="btn btn-sm" href={app.links.playStore} target="_blank" rel="noopener noreferrer">
+            Google Play<span class="sr-only"> (opens in a new tab) for {app.name}</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="stage">
+    {left.map((s, i) => <img class={`shot p${i}`} src={u(s.src)} alt={s.alt} loading="lazy" />)}
+    <video
+      class="shot p2"
+      data-splash
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster={u('screens/qanoni/splash.webp')}
+      src={u('screens/qanoni/splash.mp4')}
+      aria-label="Qanoni splash screen"></video>
+    {right.map((s, i) => <img class={`shot p${i + 3}`} src={u(s.src)} alt={s.alt} loading="lazy" />)}
+  </div>
+</article>
+
+<script>
+  // play the splash only while visible, and never under reduced motion
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          v.muted = true;
+          if (e.isIntersecting) v.play().catch(() => {});
+          else v.pause();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    document.querySelectorAll('video[data-splash]').forEach((v) => io.observe(v));
+  }
+</script>
+
+<style>
+  .spotlight {
+    --q: #a46bd6;
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: 1.5rem;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border: 1px solid color-mix(in srgb, var(--q) 35%, transparent);
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(70% 110% at 75% 50%, color-mix(in srgb, var(--q) 30%, transparent), transparent 70%),
+      #0b090e;
+  }
+  .logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 23%;
+    border: 1px solid var(--border-strong);
+  }
+  .kicker {
+    margin-top: 1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--q) 65%, #fff);
+  }
+  h3 {
+    margin-top: 0.35rem;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+  }
+  .text {
+    margin-top: 0.5rem;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    font-size: 0.72rem;
+  }
+  .chips li {
+    padding: 0.25rem 0.65rem;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--q) 18%, transparent);
+    color: var(--text);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+  /* splash in front, screens fanned behind it */
+  .stage {
+    --w: clamp(100px, 13vw, 180px);
+    position: relative;
+    height: calc(var(--w) * 2.17 + 2rem);
+  }
+  .shot {
+    position: absolute;
+    top: 1rem;
+    left: calc(50% - var(--w) / 2);
+    width: var(--w);
+    aspect-ratio: 600 / 1299;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: #000;
+    box-shadow: 0 24px 40px -18px rgba(0, 0, 0, 0.95);
+    transform: translateX(calc(var(--o) * var(--w) * var(--spread, 0.62))) rotate(calc(var(--o) * 4deg))
+      scale(calc(1 - var(--d) * 0.09));
+    transition: transform 0.55s var(--ease);
+    z-index: calc(3 - var(--d));
+  }
+  .p0 {
+    --o: -2;
+    --d: 2;
+  }
+  .p1 {
+    --o: -1;
+    --d: 1;
+  }
+  .p2 {
+    --o: 0;
+    --d: 0;
+  }
+  .p3 {
+    --o: 1;
+    --d: 1;
+  }
+  .p4 {
+    --o: 2;
+    --d: 2;
+  }
+  .stage:hover {
+    --spread: 0.76;
+  }
+  @media (max-width: 860px) {
+    .spotlight {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .stage {
+      --w: clamp(110px, 32vw, 170px);
+      --spread: 0.5;
+    }
+    .stage:hover {
+      --spread: 0.56;
+    }
+  }
+</style>
