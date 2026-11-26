@@ -5,13 +5,12 @@ import { u } from '../utils';
 interface Props {
   project: Project;
   index: number;
-  wide?: boolean;
 }
-const { project, index, wide = false } = Astro.props;
+const { project, index } = Astro.props;
 const num = String(index + 1).padStart(2, '0');
 ---
 
-<article class:list={['card pcard', { wide }]} data-reveal style={`--d:${(index % 2) * 80}ms`}>
+<article class:list={'card pcard'} data-reveal style={`--d:${(index % 2) * 80}ms`}>
   <div class:list={['cover', { shots: project.screenshots || project.logo }]} aria-hidden="true">
     {
       project.screenshots?.slice(0, 2).map((s, i) => (
@@ -30,7 +29,7 @@ const num = String(index + 1).padStart(2, '0');
     </h3>
     <p class="short">{project.short}</p>
     <ul class="tags" aria-label="Technology">
-      {project.stack.slice(0, wide ? 7 : 5).map((s) => <li class="tag">{s}</li>)}
+      {project.stack.slice(0, 5).map((s) => <li class="tag">{s}</li>)}
     </ul>
     <div class="foot">
       <span class="more">Read case study <span aria-hidden="true">→</span></span>
@@ -81,9 +80,6 @@ const num = String(index + 1).padStart(2, '0');
       radial-gradient(120% 140% at 100% 0%, rgba(46, 230, 168, 0.28), rgba(7, 10, 12, 0.1) 70%),
       radial-gradient(90% 120% at 0% 100%, rgba(255, 197, 97, 0.16), transparent 70%);
     border-bottom: 1px solid var(--border);
-  }
-  .wide .cover {
-    height: 190px;
   }
   .cover.shots {
     height: 250px;
@@ -226,32 +222,6 @@ const num = String(index + 1).padStart(2, '0');
     padding-block: 0.4rem;
   }
 
-  @media (min-width: 900px) {
-    .wide {
-      flex-direction: row;
-    }
-    .wide .cover {
-      width: 38%;
-      height: auto;
-      min-height: 100%;
-      border-bottom: 0;
-      border-right: 1px solid var(--border);
-      align-items: flex-start;
-    }
-    .wide .num {
-      font-size: 4rem;
-    }
-    .wide .body {
-      padding: 2rem 2.25rem;
-    }
-    .wide h3 {
-      font-size: 1.9rem;
-    }
-    .wide .short {
-      font-size: 1.1rem;
-      max-width: 36rem;
-    }
-  }
   .cover.shots {
     height: 190px;
   }
@@ -279,28 +249,17 @@ const num = String(index + 1).padStart(2, '0');
   .hero-logo {
     width: 104px;
   }
-  @media (min-width: 900px) {
-    .wide .cover.shots,
-    .wide .cover {
-      height: auto;
-      min-height: 100%;
-    }
-  }
   @media (min-width: 1100px) {
-    .pcard:not(.wide) h3 {
+    .pcard h3 {
       font-size: 1.15rem;
     }
-    .pcard:not(.wide) .short {
+    .pcard .short {
       font-size: 0.92rem;
     }
-    .pcard:not(.wide) .tags {
+    .pcard .tags {
       display: none;
     }
-    .pcard:not(.wide) .foot {
+    .pcard .foot {
       margin-top: auto;
     }
-    .wide .body {
-      padding-block: 1.5rem;
-    }
-  }
-</style>
+  }</style>
