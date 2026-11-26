@@ -1,3 +1,5 @@
+import { screens } from './screens';
+
 export interface StoreLinks {
   appStore?: string;
   playStore?: string;
@@ -21,6 +23,7 @@ export interface Project {
   outcome: string;
   links: StoreLinks;
   linkNote?: string;
+  logo?: string; // path under public/
   notes?: string[];
   timeline?: string;
   credits?: string;
@@ -32,7 +35,7 @@ export const projects: Project[] = [
   {
     slug: 'white-label-academy-platform',
     name: 'White-label Academy Platform',
-    short: 'A reusable Flutter platform powering eight published, branded academy apps.',
+    short: 'A reusable Flutter platform powering nine published, branded academy apps.',
     category: 'Platform engineering',
     platform: 'Flutter · iOS & Android',
     problem:
@@ -82,13 +85,16 @@ export const projects: Project[] = [
       },
     ],
     stack: ['Flutter', 'Dart', 'Dio', 'Cubit / BLoC', 'Firebase', 'Kotlin method channel', 'Cloudflare R2'],
-    outcome: 'Eight published applications run on the same reusable foundation, so a fix or feature is written once and reaches every app.',
-    links: { appStore: 'https://apps.apple.com/us/app/golden-academy/id6789908891' },
+    outcome: 'Nine published applications run on the same reusable foundation, so a fix or feature is written once and reaches every app.',
+    links: {
+      appStore: 'https://apps.apple.com/us/app/id6789908891',
+      playStore: 'https://play.google.com/store/apps/details?id=com.edulens.golden',
+    },
     linkNote: 'Public reference app built on the platform: Golden Academy.',
-    notes: ['Individual academy and teacher clients are intentionally not named.'],
   },
   {
     slug: 'nasu-university-learning-app',
+    logo: 'logos/nasu-university-learning-app.webp',
     name: 'NASU',
     short: 'A university learning management app, from first commit to store launch in about six weeks.',
     category: 'University LMS',
@@ -132,6 +138,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'edulens-student-app',
+    logo: 'logos/edulens-student-app.webp',
+    screenshots: screens['edulens-student-app'],
     name: 'EduLens Student App',
     short: 'A production education marketplace that I took over, maintained and extended.',
     category: 'Education marketplace',
@@ -168,6 +176,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'carven',
+    logo: 'logos/carven.webp',
+    screenshots: screens['carven'],
     name: 'CARVEN',
     short: 'Online courses combined with physical-center attendance, led alongside another developer.',
     category: 'Learning platform',
@@ -204,6 +214,8 @@ export const projects: Project[] = [
   },
   {
     slug: 'edulens-scanner',
+    logo: 'logos/edulens-scanner.webp',
+    screenshots: screens['edulens-scanner'],
     name: 'EduLens Scanner',
     short: 'An offline-first QR attendance app that I designed and built.',
     category: 'Offline-first utility',
@@ -243,13 +255,22 @@ export const projects: Project[] = [
 export interface MoreProject {
   name: string;
   text: string;
+  logo?: string;
   links?: StoreLinks;
 }
 
 // Only verified, public information. Add links only once confirmed public.
 export const moreProjects: MoreProject[] = [
-  { name: 'Qanoni', text: 'A Flutter application I worked on at EduLens.' },
-  { name: 'Mr. Heta', text: 'An educational app with video lessons, PDFs and exams for students.' },
+  {
+    name: 'Qanoni',
+    logo: 'logos/qanoni.webp',
+    text: 'A Flutter application I worked on at EduLens.',
+    links: {
+      appStore: 'https://apps.apple.com/us/app/%D9%82%D8%A7%D9%86%D9%88%D9%86%D9%8A-qanuni/id6755084229',
+      playStore: 'https://play.google.com/store/apps/details?id=app.qanoniapp.com',
+    },
+  },
+  { name: 'Mr.Heta', text: 'An educational app with video lessons, PDFs and exams for students.' },
   { name: 'Branded academy apps', text: 'Further academy applications published from the same reusable foundation, each with its own identity.' },
   { name: 'TrendZone', text: 'A Flutter mobile project.' },
 ];

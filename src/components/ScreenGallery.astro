@@ -1,0 +1,98 @@
+---
+import { u } from '../utils';
+
+interface Props {
+  shots: { src: string; alt: string }[];
+  /** optional splash recording shown first; src is the path without extension */
+  video?: { src: string; label: string };
+  label: string;
+}
+const { shots, video, label } = Astro.props;
+---
+
+<ul class="gallery" tabindex="0" aria-label={label}>
+  {
+    video && (
+      <li>
+        <video
+          data-autoplay
+          muted
+          loop
+          playsinline
+          controls
+          preload="none"
+          poster={u(`${video.src}.webp`)}
+          src={u(`${video.src}.mp4`)}
+          aria-label={video.label}
+        />
+      </li>
+    )
+  }
+  {
+    shots.map((s) => (
+      <li>
+        <img src={u(s.src)} alt={s.alt} loading="lazy" decoding="async" />
+      </li>
+    ))
+  }
+</ul>
+
+<script>
+  // play splash recordings only while visible, and never under reduced motion
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          v.muted = true;
+          if (e.isIntersecting) v.play().catch(() => {});
+          else v.pause();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    document.querySelectorAll('video[data-autoplay]').forEach((v) => io.observe(v));
+  }
+</script>
+
+<style>
+  /* let the strip scroll inside grid layouts instead of widening them */
+  :global(:has(> .gallery)) {
+    min-width: 0;
+  }
+  .gallery {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-block: 0.5rem 1.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+  }
+  li {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+  img,
+  video {
+    display: block;
+    height: clamp(380px, 58vh, 520px);
+    width: auto;
+    max-width: none;
+    border-radius: 20px;
+    border: 1px solid var(--border-strong);
+    transition: translate 0.3s var(--ease);
+  }
+  video {
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    background: #000;
+  }
+  li:hover img {
+    translate: 0 -6px;
+  }
+  img,
+  video {
+    height: clamp(320px, 52svh, 440px);
+  }
+</style>

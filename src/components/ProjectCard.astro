@@ -12,11 +12,18 @@ const num = String(index + 1).padStart(2, '0');
 ---
 
 <article class:list={['card pcard', { wide }]} data-reveal style={`--d:${(index % 2) * 80}ms`}>
-  <div class="cover" aria-hidden="true">
+  <div class:list={['cover', { shots: project.screenshots || project.logo }]} aria-hidden="true">
+    {
+      project.screenshots?.slice(0, 2).map((s, i) => (
+        <img class:list={['peek', `peek-${i}`]} src={u(s.src)} alt="" loading="lazy" />
+      ))
+    }
+    {!project.screenshots && project.logo && <img class="hero-logo" src={u(project.logo)} alt="" loading="lazy" />}
     <span class="num mono">{num}</span>
     <span class="cat mono">{project.category}</span>
   </div>
   <div class="body">
+    {project.screenshots && project.logo && <img class="logo" src={u(project.logo)} alt="" width="56" height="56" loading="lazy" />}
     <p class="platform mono">{project.platform}</p>
     <h3>
       <a class="stretch" href={u(`projects/${project.slug}/`)}>{project.name}</a>
@@ -57,9 +64,9 @@ const num = String(index + 1).padStart(2, '0');
   }
   .pcard:hover,
   .pcard:focus-within {
-    border-color: rgba(79, 195, 247, 0.5);
-    transform: translateY(-3px);
-    box-shadow: 0 24px 48px -28px rgba(2, 86, 155, 0.9);
+    border-color: rgba(46, 230, 168, 0.5);
+    translate: 0 -5px;
+    box-shadow: 0 28px 56px -28px rgba(46, 230, 168, 0.85);
   }
   .cover {
     position: relative;
@@ -69,13 +76,67 @@ const num = String(index + 1).padStart(2, '0');
     justify-content: space-between;
     align-items: flex-start;
     background:
-      linear-gradient(rgba(201, 214, 227, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
-      linear-gradient(90deg, rgba(201, 214, 227, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
-      radial-gradient(120% 140% at 100% 0%, rgba(2, 86, 155, 0.75), rgba(8, 24, 39, 0.1) 70%);
+      linear-gradient(rgba(197, 208, 205, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+      linear-gradient(90deg, rgba(197, 208, 205, 0.07) 1px, transparent 1px) 0 0 / 28px 28px,
+      radial-gradient(120% 140% at 100% 0%, rgba(46, 230, 168, 0.28), rgba(7, 10, 12, 0.1) 70%),
+      radial-gradient(90% 120% at 0% 100%, rgba(255, 197, 97, 0.16), transparent 70%);
     border-bottom: 1px solid var(--border);
   }
   .wide .cover {
     height: 190px;
+  }
+  .cover.shots {
+    height: 250px;
+    overflow: hidden;
+  }
+  .peek {
+    position: absolute;
+    top: 62px;
+    width: 130px;
+    border-radius: 16px;
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.85);
+    transition:
+      translate 0.45s var(--ease),
+      rotate 0.45s var(--ease);
+  }
+  .peek-0 {
+    left: calc(50% - 118px);
+    rotate: -7deg;
+  }
+  .peek-1 {
+    left: calc(50% - 4px);
+    top: 84px;
+    rotate: 7deg;
+  }
+  .pcard:hover .peek {
+    translate: 0 -16px;
+  }
+  .pcard:hover .peek-0 {
+    rotate: -10deg;
+  }
+  .pcard:hover .peek-1 {
+    rotate: 10deg;
+  }
+  .logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 23%;
+    border: 1px solid var(--border-strong);
+  }
+  .hero-logo {
+    position: absolute;
+    left: 50%;
+    top: 56%;
+    width: 128px;
+    translate: -50% -50%;
+    border-radius: 23%;
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.85);
+    transition: scale 0.45s var(--ease);
+  }
+  .pcard:hover .hero-logo {
+    scale: 1.1;
   }
   .num {
     font-size: 2.4rem;
@@ -90,9 +151,9 @@ const num = String(index + 1).padStart(2, '0');
     text-transform: uppercase;
     color: var(--accent-2);
     padding: 0.25rem 0.55rem;
-    border: 1px solid rgba(79, 195, 247, 0.35);
+    border: 1px solid rgba(46, 230, 168, 0.35);
     border-radius: 6px;
-    background: rgba(8, 24, 39, 0.5);
+    background: rgba(7, 10, 12, 0.5);
   }
   .body {
     display: flex;
@@ -189,6 +250,57 @@ const num = String(index + 1).padStart(2, '0');
     .wide .short {
       font-size: 1.1rem;
       max-width: 36rem;
+    }
+  }
+  .cover.shots {
+    height: 190px;
+  }
+  .body {
+    gap: 0.6rem;
+    padding: 1.25rem;
+  }
+  .logo {
+    position: absolute;
+    right: 1.25rem;
+    margin-top: -0.25rem;
+    width: 44px;
+    height: 44px;
+  }
+  .peek {
+    top: 48px;
+    width: 104px;
+  }
+  .peek-0 {
+    left: calc(50% - 94px);
+  }
+  .peek-1 {
+    top: 66px;
+  }
+  .hero-logo {
+    width: 104px;
+  }
+  @media (min-width: 900px) {
+    .wide .cover.shots,
+    .wide .cover {
+      height: auto;
+      min-height: 100%;
+    }
+  }
+  @media (min-width: 1100px) {
+    .pcard:not(.wide) h3 {
+      font-size: 1.15rem;
+    }
+    .pcard:not(.wide) .short {
+      font-size: 0.92rem;
+    }
+    .pcard:not(.wide) .tags {
+      display: none;
+    }
+    .pcard:not(.wide) .foot {
+      margin-top: auto;
+    }
+    .wide .body {
+      padding-block: 1.5rem;
     }
   }
 </style>

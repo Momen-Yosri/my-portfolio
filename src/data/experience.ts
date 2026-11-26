@@ -15,7 +15,7 @@ export const experience: Role[] = [
     current: true,
     points: [
       'Lead a team of 4–6 developers: task planning, technical delivery and code ownership.',
-      'Own mobile architecture and the reusable white-label Flutter platform behind eight published apps.',
+      'Own mobile architecture and the reusable white-label Flutter platform behind nine published apps.',
       'Led NASU, a university learning app, from planning to store launch in roughly six weeks.',
       'Mentor junior developers and drive App Store and Google Play releases.',
       'Built content protection and payment integrations used across the product line.',
