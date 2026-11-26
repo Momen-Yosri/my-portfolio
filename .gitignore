@@ -6,3 +6,5 @@ dist/
 *.log
 .screens/
 .preview.log
+# raw splash recordings; web copies live in public/apps/
+tech_app_splashes/

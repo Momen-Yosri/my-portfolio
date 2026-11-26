@@ -29,7 +29,7 @@ export const snapshot: Stat[] = [
   { text: '4–6', label: 'Developers led' },
   { to: 13, label: 'Apps live on Google Play' },
   { to: 11, label: 'Apps on the App Store' },
-  { to: 8, label: 'Apps powered by my white-label platform' },
+  { to: 9, label: 'Apps powered by my white-label platform' },
   { text: '~6 wks', label: 'NASU, first commit to store launch' },
 ];
 
@@ -42,6 +42,7 @@ export const nav = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
   { label: 'Experience', href: '#experience' },
+  { label: 'Apps', href: '#apps' },
   { label: 'Projects', href: '#projects' },
   { label: 'Expertise', href: '#expertise' },
   { label: 'Education', href: '#education' },
