@@ -3,6 +3,16 @@ const set = (slug: string, app: string, captions: string[]) =>
   captions.map((c, i) => ({ src: `screens/${slug}/${i + 1}.webp`, alt: `${app}: ${c}` }));
 
 export const screens = {
+  'nasu-university-learning-app': set('nasu-university-learning-app', 'NASU', [
+    'Student dashboard with live lecture access',
+    'Enrolled courses',
+    'Recorded lecture with custom playback controls',
+    'Exam results with answer review',
+    'Assignment grades and instructor feedback',
+    'Course page and enrolment',
+    'Course updates and notifications',
+    'Splash screen',
+  ]),
   'edulens-student-app': set('edulens-student-app', 'EduLens', [
     'Home page with subjects and lecturers',
     'Create account screen',

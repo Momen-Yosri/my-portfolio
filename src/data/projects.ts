@@ -94,6 +94,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'nasu-university-learning-app',
+    screenshots: screens['nasu-university-learning-app'],
     logo: 'logos/nasu-university-learning-app.webp',
     name: 'NASU',
     short: 'A university learning management app, from first commit to store launch in about six weeks.',
