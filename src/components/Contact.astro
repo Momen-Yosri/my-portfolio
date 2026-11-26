@@ -1,9 +1,12 @@
 ---
 import SectionHeading from './SectionHeading.astro';
 import { profile } from '../data/profile';
+import { u } from '../utils';
 
 const rows = [
   { label: 'Email', value: profile.email, href: `mailto:${profile.email}`, ext: false },
+  { label: 'WhatsApp', value: profile.phoneDisplay, href: profile.whatsapp, ext: true },
+  { label: 'Phone', value: profile.phoneDisplay, href: `tel:${profile.phone}`, ext: false },
   { label: 'LinkedIn', value: 'linkedin.com/in/momen-yosri', href: profile.linkedin, ext: true },
   { label: 'GitHub', value: 'github.com/Momen-Yosri', href: profile.github, ext: true },
 ];
@@ -18,6 +21,13 @@ const rows = [
       id="contact-title"
     />
     <ul class="rows" data-reveal>
+      <li>
+        <a href={u(profile.cv)} download>
+          <span class="k mono">CV</span>
+          <span class="v">Download as PDF</span>
+          <span class="arrow" aria-hidden="true">↓</span>
+        </a>
+      </li>
       {
         rows.map((r) => (
           <li>
