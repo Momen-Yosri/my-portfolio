@@ -29,12 +29,12 @@ import { career } from '../data/profile';
           }
         </ul>
       </div>
-    </div>
 
-    <div class="career" data-reveal>
-      <span class="eyebrow">Career direction</span>
-      <h3>{career.title}</h3>
-      <p>{career.text}</p>
+      <div class="career" data-reveal style="--d: 160ms">
+        <span class="eyebrow">Career direction</span>
+        <h3>{career.title}</h3>
+        <p>{career.text}</p>
+      </div>
     </div>
   </div>
 </section>
@@ -103,6 +103,33 @@ import { career } from '../data/profile';
     margin-top: 0.75rem;
   }
   @media (max-width: 800px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .block {
+    padding: 1.4rem;
+  }
+  .school {
+    font-size: 1.25rem;
+  }
+  .certs {
+    gap: 0.75rem;
+  }
+  .certs li {
+    padding-bottom: 0.75rem;
+  }
+  .career {
+    margin: 0;
+    padding: 1.4rem;
+  }
+  .career h3 {
+    font-size: 1.25rem;
+  }
+  @media (max-width: 900px) {
     .grid {
       grid-template-columns: 1fr;
     }

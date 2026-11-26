@@ -248,4 +248,19 @@ const first = apps[0];
       max-width: 260px;
     }
   }
+  @media (min-width: 801px) {
+    .stage {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+    .device-wrap {
+      width: clamp(210px, calc((100svh - 360px) * 0.5625), 290px);
+    }
+    .embedded .device-wrap {
+      width: 230px;
+    }
+    .picker {
+      grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+      margin-top: 1.5rem;
+    }
+  }
 </style>
