@@ -34,7 +34,7 @@ const meta = [
   description={`${p.short} ${p.outcome}`.slice(0, 300)}
   type="article"
 >
-  <article>
+  <article class="case" style={`--accent-2:${p.color}`}>
     <header class="top">
       <div class="container">
         <nav class="crumbs mono" aria-label="Breadcrumb">
@@ -333,7 +333,7 @@ const meta = [
   }
   .pager {
     border-top: 1px solid var(--border);
-    background: rgba(7, 11, 24, 0.45);
+    background: rgba(5, 5, 5, 0.45);
   }
   .pager-in {
     display: grid;

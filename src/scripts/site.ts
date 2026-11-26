@@ -79,6 +79,12 @@ if (secs.length && 'IntersectionObserver' in window) {
     (entries) => {
       for (const e of entries) {
         if (e.isIntersecting) {
+          // navigation takes the colour of the section in view
+          const accent = e.target.id === 'home' ? '#ffffff' : getComputedStyle(e.target).getPropertyValue('--accent-2');
+          document.querySelectorAll<HTMLElement>('.site-header, .scroll-progress').forEach((el) => {
+            el.style.setProperty('--accent-2', accent);
+            el.style.setProperty('--gradient', accent);
+          });
           links.forEach((l) =>
             l.hash === `#${e.target.id}` ? l.setAttribute('aria-current', 'true') : l.removeAttribute('aria-current'),
           );

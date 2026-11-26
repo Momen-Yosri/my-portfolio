@@ -77,17 +77,17 @@ const modules = [
     padding: clamp(1rem, 3vw, 2rem);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    background: rgba(7, 11, 24, 0.55);
+    background: rgba(5, 5, 5, 0.55);
   }
   .layer {
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-sm);
     padding: 1.1rem 1.25rem 1.25rem;
-    background: rgba(18, 27, 52, 0.7);
+    background: rgba(18, 18, 18, 0.7);
   }
   .core {
-    border-color: rgba(110, 130, 255, 0.5);
-    background: linear-gradient(180deg, rgba(110, 130, 255, 0.28), rgba(18, 27, 52, 0.7));
+    border-color: color-mix(in srgb, var(--accent-2) 50%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--accent-2) 28%, transparent), rgba(18, 18, 18, 0.7));
   }
   .layer-title {
     font-size: 0.72rem;
@@ -108,7 +108,7 @@ const modules = [
     border: 1px solid var(--border);
     border-radius: 6px;
     color: var(--text);
-    background: rgba(7, 11, 24, 0.5);
+    background: rgba(5, 5, 5, 0.5);
   }
   .sub {
     margin-top: 0.8rem;
@@ -129,7 +129,7 @@ const modules = [
     top: 0;
     bottom: 8px;
     width: 1px;
-    background: linear-gradient(var(--accent-2), rgba(110, 130, 255, 0.2));
+    background: linear-gradient(var(--accent-2), color-mix(in srgb, var(--accent-2) 20%, transparent));
   }
   .link::after {
     content: '';
@@ -165,7 +165,7 @@ const modules = [
     padding: 0.8rem 0.9rem;
     border: 1px solid var(--border);
     border-radius: 8px;
-    background: rgba(7, 11, 24, 0.5);
+    background: rgba(5, 5, 5, 0.5);
   }
   .trio b {
     color: var(--text);
@@ -197,7 +197,7 @@ const modules = [
     font-weight: 600;
   }
   .sec {
-    border-color: rgba(110, 130, 255, 0.4);
+    border-color: color-mix(in srgb, var(--accent-2) 40%, transparent);
   }
   .native {
     margin-top: auto;

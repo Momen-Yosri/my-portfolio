@@ -24,6 +24,7 @@ export interface Project {
   links: StoreLinks;
   linkNote?: string;
   logo?: string; // path under public/
+  color: string; // accent for the card and case study
   notes?: string[];
   timeline?: string;
   credits?: string;
@@ -34,6 +35,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'white-label-academy-platform',
+    color: '#5ee6a8',
     name: 'White-label Academy Platform',
     short: 'A reusable Flutter platform powering nine published, branded academy apps.',
     category: 'Platform engineering',
@@ -94,6 +96,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'nasu-university-learning-app',
+    color: '#6f9bff',
     screenshots: screens['nasu-university-learning-app'],
     logo: 'logos/nasu-university-learning-app.webp',
     name: 'NASU',
@@ -139,6 +142,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'edulens-student-app',
+    color: '#29c5f6',
     logo: 'logos/edulens-student-app.webp',
     screenshots: screens['edulens-student-app'],
     name: 'EduLens Student App',
@@ -177,6 +181,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'carven',
+    color: '#ff5d63',
     logo: 'logos/carven.webp',
     screenshots: screens['carven'],
     name: 'CARVEN',
@@ -215,6 +220,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'edulens-scanner',
+    color: '#ffa724',
     logo: 'logos/edulens-scanner.webp',
     screenshots: screens['edulens-scanner'],
     name: 'EduLens Scanner',

@@ -10,7 +10,7 @@ const { project } = Astro.props;
 const mid = (brandedApps.length - 1) / 2;
 ---
 
-<article class="card platform-card" data-reveal>
+<article class="card platform-card" data-reveal style={`--accent-2:${project.color}`}>
   <div class="text">
     <p class="kicker mono">01 · {project.category}</p>
     <h3><a class="stretch" href={u(`projects/${project.slug}/`)}>{project.name}</a></h3>
@@ -56,11 +56,11 @@ const mid = (brandedApps.length - 1) / 2;
     gap: 1.5rem;
     padding: 1.5rem 1.75rem;
     overflow: hidden;
-    border-color: rgba(110, 130, 255, 0.3);
+    border-color: color-mix(in srgb, var(--accent-2) 30%, transparent);
   }
   .platform-card:hover,
   .platform-card:focus-within {
-    border-color: rgba(110, 130, 255, 0.7);
+    border-color: color-mix(in srgb, var(--accent-2) 70%, transparent);
   }
   .kicker {
     font-size: 0.7rem;

@@ -12,7 +12,16 @@ const prefix = home ? '' : u('');
 <header class="site-header">
   <div class="container bar">
     <a class="brand" href={home ? '#home' : u('')} aria-label={`${profile.name}, home`}>
-      <span class="mark" aria-hidden="true">{profile.monogram}</span>
+      <svg class="mark" viewBox="0 0 64 64" width="36" height="36" aria-hidden="true">
+        <rect width="64" height="64" rx="16" fill="#fff"></rect>
+        <path
+          d="M15 47V19L32 35L49 19V47M32 35V48"
+          fill="none"
+          stroke="#050505"
+          stroke-width="6"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
       <span class="brand-name">{profile.name}</span>
     </a>
 
@@ -61,7 +70,7 @@ const prefix = home ? '' : u('');
       backdrop-filter 0.3s;
   }
   :global(.site-header.scrolled) {
-    background: rgba(7, 11, 24, 0.78);
+    background: rgba(5, 5, 5, 0.78);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom-color: var(--border);
@@ -84,18 +93,11 @@ const prefix = home ? '' : u('');
   .brand:hover {
     text-decoration: none;
   }
+  /* joined MY monogram: colours live on the SVG so it is always white */
   .mark {
-    display: grid;
-    place-items: center;
+    flex: none;
     width: 36px;
     height: 36px;
-    border-radius: 9px;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #fff;
-    background: linear-gradient(140deg, var(--accent), #312e81);
-    border: 1px solid rgba(110, 130, 255, 0.4);
   }
   .menu {
     display: flex;
@@ -116,7 +118,7 @@ const prefix = home ? '' : u('');
     text-decoration: none;
   }
   .menu a[data-nav-link][aria-current='true'] {
-    background: rgba(110, 130, 255, 0.1);
+    background: color-mix(in srgb, var(--accent-2) 10%, transparent);
   }
   .cta-mobile,
   .toggle {
@@ -180,7 +182,7 @@ const prefix = home ? '' : u('');
       flex-direction: column;
       gap: 0;
       padding: 1rem var(--gutter) 2rem;
-      background: rgba(7, 11, 24, 0.98);
+      background: rgba(5, 5, 5, 0.98);
       overflow-y: auto;
       visibility: hidden;
       opacity: 0;
