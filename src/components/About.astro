@@ -1,13 +1,27 @@
 ---
+import { Image } from 'astro:assets';
+import profilePhoto from '../assets/profile.jpg';
 import SectionHeading from './SectionHeading.astro';
 import { profile } from '../data/profile';
 ---
 
 <section id="about" class="section" aria-labelledby="about-title">
   <div class="container wrap">
-    <SectionHeading eyebrow="About" title="Reusable systems over repeated work." id="about-title" />
-    <div class="body">
-      {profile.about.map((p, i) => <p data-reveal style={`--d:${i * 80}ms`}>{p}</p>)}
+    <figure data-reveal>
+      <Image
+        src={profilePhoto}
+        alt={`Portrait of ${profile.name}`}
+        widths={[320, 480, 640]}
+        sizes="(max-width: 860px) 80vw, 340px"
+        format="webp"
+        quality={80}
+      />
+    </figure>
+    <div class="text">
+      <SectionHeading eyebrow="About" title="Reusable systems over repeated work." id="about-title" />
+      <div class="body">
+        {profile.about.map((p, i) => <p data-reveal style={`--d:${i * 80}ms`}>{p}</p>)}
+      </div>
     </div>
   </div>
 </section>
@@ -15,28 +29,41 @@ import { profile } from '../data/profile';
 <style>
   .wrap {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(1.5rem, 6vw, 5rem);
-    align-items: start;
+    grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
   }
   .wrap :global(.section-head) {
-    margin-bottom: 0;
+    margin-bottom: 1.5rem;
+  }
+  figure {
+    margin: 0;
+    border-radius: 999px 999px 24px 24px;
+    overflow: hidden;
+  }
+  figure :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
   }
   .body {
     display: grid;
-    gap: 1.25rem;
-    font-size: 1.08rem;
-    max-width: 40rem;
+    gap: 1rem;
+    font-size: 1.05rem;
+    max-width: 44rem;
   }
   .body p:first-child {
     color: var(--text);
   }
-  @media (max-width: 860px) {
+  @media (max-width: 760px) {
     .wrap {
       grid-template-columns: 1fr;
     }
-    .wrap :global(.section-head) {
-      margin-bottom: 0.5rem;
+    figure {
+      width: min(100%, 240px);
+      justify-self: center;
     }
   }
 </style>

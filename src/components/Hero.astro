@@ -2,164 +2,344 @@
 import { Image } from 'astro:assets';
 import profilePhoto from '../assets/profile.jpg';
 import { profile } from '../data/profile';
+import { brandedApps } from '../data/apps';
+import { u } from '../utils';
+
+// Platform apps, plus other apps I worked on (labelled differently: they are not built on the core).
+const ring = [
+  ...brandedApps.map((a) => ({ ...a, file: `apps/${a.slug}`, source: 'tech_app_core' })),
+  { name: 'Qanoni', color: '#0c0c0d', glow: '#a46bd6', file: 'screens/qanoni/splash', source: 'also my work' },
+];
+// Qanoni sits second so it comes round early.
+ring.splice(1, 0, ring.pop()!);
+const apps = ring.map((a) => ({ ...a, video: u(`${a.file}.mp4`), poster: u(`${a.file}.webp`) }));
+const first = apps[0];
+const words = profile.headline.split(' ');
+const step = 360 / apps.length;
 ---
 
-<section id="home" class="hero" aria-labelledby="hero-title">
-  <div class="grid-bg" aria-hidden="true"></div>
-  <div class="container inner">
-    <div class="copy">
-      <p class="eyebrow">{profile.role} · {profile.company}</p>
-      <h1 id="hero-title">{profile.headline}</h1>
-      <p class="lead">{profile.heroText}</p>
-      <div class="actions">
-        <a class="btn btn-primary" href="#projects">View my work</a>
-        <a class="btn" href="#contact">Contact me</a>
-        <a class="btn" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      </div>
-    </div>
+<section id="home" class="hero" aria-labelledby="hero-title" data-hero style={`--brand:${first.glow}`}>
+  <div class="floor" aria-hidden="true"><i></i></div>
+  <p class="giant" aria-hidden="true" data-giant><bdi>{first.name}</bdi></p>
 
-    <figure class="visual">
-      <div class="photo">
-        <Image
-          src={profilePhoto}
-          alt={`Portrait of ${profile.name}`}
-          widths={[320, 480, 640]}
-          sizes="(max-width: 900px) 80vw, 420px"
-          format="webp"
-          quality={78}
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-      <figcaption class="panel mono">
-        <div><span>role</span><b>{profile.role}</b></div>
-        <div><span>company</span><b>{profile.company}</b></div>
-        <div><span>focus</span><b>{profile.focus}</b></div>
-        <div><span>location</span><b>{profile.location}</b></div>
-      </figcaption>
-    </figure>
+  <div class="container head">
+    <p class="who">
+      <Image src={profilePhoto} alt="" width={88} height={110} format="webp" loading="eager" />
+      <span><b>{profile.name}</b> {profile.role} · {profile.company}</span>
+    </p>
+    <h1 id="hero-title">
+      {
+        words.map((w, i) => (
+          <Fragment>
+            <span class:list={['mask', { accent: i >= words.length - 2 }]}>
+              <span class="word" style={`--i:${i}`}>{w}</span>
+            </span>{' '}
+          </Fragment>
+        ))
+      }
+    </h1>
+  </div>
+
+  <div class="stage" data-stage>
+    <ul class="ring" data-ring aria-label="Apps I have built and worked on. Drag to rotate.">
+      {
+        apps.map((a, i) => (
+          <li style={`--a:${i * step}deg;--c:${a.color}`}>
+            <button type="button" data-card data-name={a.name} data-glow={a.glow} data-source={a.source} data-video={a.video} aria-label={`Show ${a.name}`}>
+              <img src={a.poster} alt="" width="540" height="960" draggable="false" />
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="container dock">
+    <div class="switcher mono">
+      <button type="button" data-prev aria-label="Previous app">←</button>
+      <p><span data-source-label>{first.source}</span> → <b data-current><bdi>{first.name}</bdi></b></p>
+      <button type="button" data-next aria-label="Next app">→</button>
+      <button type="button" data-pause aria-pressed="false">Pause</button>
+    </div>
+    <p class="lead">{profile.heroText}</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#projects">View my work</a>
+      <a class="btn" href="#contact">Contact me</a>
+      <a class="btn" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
   </div>
 </section>
 
+<script>
+  import '../scripts/hero';
+</script>
+
 <style>
-  .hero {
-    position: relative;
-    padding-block: clamp(3rem, 8vw, 6rem) clamp(4rem, 9vw, 7rem);
-    overflow: hidden;
+  @property --brand {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #4ff0bb;
   }
-  .grid-bg {
+  .hero {
+    --w: clamp(112px, 22svh, 230px);
+    position: relative;
+    padding-block: clamp(0.75rem, 2svh, 2rem);
+    overflow: hidden;
+    text-align: center;
+    transition: --brand 0.7s;
+    isolation: isolate;
+  }
+  .hero::before {
+    content: '';
     position: absolute;
     inset: 0;
-    background-image:
-      linear-gradient(rgba(201, 214, 227, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201, 214, 227, 0.06) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 70% 70% at 70% 30%, #000 20%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 70% 30%, #000 20%, transparent 75%);
+    z-index: -2;
+    background: radial-gradient(60% 42% at 50% 54%, color-mix(in srgb, var(--brand) 34%, transparent), transparent 100%);
+  }
+  /* perspective grid floor, scrolling toward the viewer */
+  .floor {
+    position: absolute;
+    inset: 42% 0 0;
+    z-index: -1;
+    overflow: hidden;
+    perspective: 340px;
+    mask-image: linear-gradient(transparent, #000 35%, transparent 92%);
+    -webkit-mask-image: linear-gradient(transparent, #000 35%, transparent 92%);
+  }
+  .floor i {
+    position: absolute;
+    inset: -60% -60% -20%;
+    transform: rotateX(68deg);
+    background:
+      linear-gradient(color-mix(in srgb, var(--brand) 45%, transparent) 1px, transparent 1px) 0 0 / 100% 56px,
+      linear-gradient(90deg, color-mix(in srgb, var(--brand) 45%, transparent) 1px, transparent 1px) 0 0 / 56px 100%;
+    opacity: 0.55;
+  }
+  .giant {
+    position: absolute;
+    inset: 46% 0 auto;
+    z-index: -1;
+    font-size: clamp(4rem, 15vw, 13rem);
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--brand) 40%, transparent);
     pointer-events: none;
   }
-  .inner {
-    position: relative;
-    display: grid;
-    gap: clamp(2.5rem, 6vw, 5rem);
+  .who {
+    display: inline-flex;
     align-items: center;
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: 0.75rem;
+    padding: 0.3rem 1.1rem 0.3rem 0.35rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 99px;
+    background: rgba(7, 10, 12, 0.6);
+    font-size: 0.85rem;
+    text-align: left;
+  }
+  .who img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 8%;
+    border: 2px solid var(--brand);
+  }
+  .who b {
+    display: block;
+    color: var(--text);
   }
   h1 {
-    margin-top: 1.25rem;
-    font-size: clamp(2.5rem, 6.4vw, 4.6rem);
-    line-height: 1.02;
-    letter-spacing: -0.035em;
-    max-width: 14ch;
+    margin: 0.75rem auto 0;
+    font-size: clamp(2.2rem, min(5vw, 7.5svh), 4.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    font-weight: 750;
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+  .mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding: 0 0.04em 0.14em;
+    margin: 0 -0.04em -0.1em;
+  }
+  .word {
+    display: inline-block;
+  }
+  .accent .word {
+    color: color-mix(in srgb, var(--brand) 78%, #fff);
+  }
+  .stage {
+    height: calc(var(--w) * 1.78 + 2.5rem);
+    display: grid;
+    place-items: center;
+    perspective: 1300px;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+  }
+  .stage:active {
+    cursor: grabbing;
+  }
+  .ring {
+    --r: calc(var(--w) * 1.75);
+    position: relative;
+    width: var(--w);
+    aspect-ratio: 9 / 16;
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--r) * -1)) rotateX(-4deg) rotateY(var(--turn, 0deg));
+  }
+  .ring li {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(var(--a)) translateZ(var(--r));
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    opacity: var(--o, 1);
+  }
+  .ring button {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 24px;
+    background: #05080a;
+    cursor: pointer;
+    box-shadow: 0 30px 50px -24px rgba(0, 0, 0, 0.9);
+    transition:
+      box-shadow 0.4s,
+      border-color 0.4s;
+  }
+  .ring li:global(.front) button {
+    border-color: var(--brand);
+    box-shadow: 0 0 60px -8px var(--brand);
+  }
+  .ring img,
+  .ring :global(video) {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    object-fit: cover;
+    border-radius: 19px;
+    background: var(--c);
+    pointer-events: none;
+  }
+  .switcher {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+  .switcher p {
+    min-width: min(21rem, 70vw);
+    color: var(--text);
+  }
+  .switcher span {
+    color: var(--text-3);
+  }
+  .switcher b {
+    color: color-mix(in srgb, var(--brand) 78%, #fff);
+  }
+  .switcher button {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0 0.7rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 99px;
+    background: rgba(7, 10, 12, 0.7);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+  }
+  .switcher button:hover {
+    border-color: var(--brand);
   }
   .lead {
-    margin-top: 1.5rem;
-    max-width: 38rem;
-    font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+    margin: 0.75rem auto 0;
+    max-width: 46rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
   .actions {
-    margin-top: 2.25rem;
+    margin-top: 0.9rem;
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 0.75rem;
   }
-  .visual {
-    margin: 0;
-    position: relative;
-    max-width: 420px;
-    justify-self: end;
-    width: 100%;
-  }
-  .photo {
-    aspect-ratio: 4 / 5;
-    border-radius: var(--radius);
-    overflow: hidden;
-    border: 1px solid var(--border-strong);
-    background: var(--surface);
-    box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
-  }
-  .photo :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 20%;
-  }
-  .panel {
-    margin: -3.25rem 1rem 0;
-    position: relative;
-    padding: 0.9rem 1rem;
-    display: grid;
-    gap: 0.45rem;
-    font-size: 0.76rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-strong);
-    background: rgba(8, 24, 39, 0.82);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-  .panel div {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .panel span {
-    color: var(--text-3);
-  }
-  .panel b {
-    color: var(--text);
-    font-weight: 500;
-    text-align: right;
-  }
-  @media (max-width: 900px) {
-    .inner {
-      grid-template-columns: 1fr;
+  @media (max-width: 560px) {
+    .hero {
+      --w: 140px;
     }
-    .visual {
-      justify-self: start;
-      max-width: 380px;
+    .switcher p {
+      min-width: 12.5rem;
+      font-size: 0.72rem;
     }
+  }
+  :global(html:not(.js)) .switcher {
+    display: none;
   }
   @media (prefers-reduced-motion: no-preference) {
-    .copy > *,
-    .visual {
-      animation: rise 0.8s var(--ease) both;
+    .word {
+      animation: slide 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: calc(0.15s + var(--i) * 110ms);
     }
-    .copy > :nth-child(2) {
-      animation-delay: 0.08s;
+    .who,
+    .dock > * {
+      animation: rise 0.8s var(--ease) 0.2s both;
     }
-    .copy > :nth-child(3) {
-      animation-delay: 0.16s;
+    .dock > * {
+      animation-delay: 0.7s;
     }
-    .copy > :nth-child(4) {
-      animation-delay: 0.24s;
+    .stage {
+      animation: arrive 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s backwards;
     }
-    .visual {
-      animation-delay: 0.2s;
+    .floor i {
+      animation: travel 2.4s linear infinite;
+    }
+    .giant bdi {
+      display: inline-block;
+    }
+    .giant :global(bdi.in) {
+      animation: sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slide {
+      from {
+        transform: translateY(115%) rotate(4deg);
+      }
     }
     @keyframes rise {
       from {
         opacity: 0;
         transform: translateY(18px);
+      }
+    }
+    @keyframes arrive {
+      from {
+        opacity: 0;
+        transform: translateY(120px) scale(0.7);
+      }
+    }
+    @keyframes travel {
+      to {
+        background-position:
+          0 56px,
+          0 0;
+      }
+    }
+    @keyframes sweep {
+      from {
+        opacity: 0;
+        transform: translateX(18%);
       }
     }
   }
