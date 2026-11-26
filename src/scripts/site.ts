@@ -9,8 +9,11 @@ if (reduce || !('IntersectionObserver' in window)) {
     (entries) => {
       for (const e of entries) {
         if (e.isIntersecting) {
-          e.target.classList.add('in');
-          io.unobserve(e.target);
+          const el = e.target as HTMLElement;
+          el.classList.add('in');
+          io.unobserve(el);
+          const wait = (parseFloat(el.style.getPropertyValue('--d')) || 0) + 750;
+          window.setTimeout(() => el.classList.add('done'), wait);
         }
       }
     },
@@ -89,6 +92,22 @@ if (secs.length && 'IntersectionObserver' in window) {
 
 // Nav background on scroll
 const header = document.querySelector('.site-header');
-const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+const progress = document.querySelector<HTMLElement>('.scroll-progress');
+const onScroll = () => {
+  header?.classList.toggle('scrolled', window.scrollY > 8);
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progress?.style.setProperty('--p', String(max > 0 ? window.scrollY / max : 0));
+};
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
+
+// Pointer effects: card spotlight (mouse only)
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll<HTMLElement>('.card').forEach((card) =>
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    }),
+  );
+}

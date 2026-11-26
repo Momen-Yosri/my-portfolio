@@ -61,7 +61,7 @@ const prefix = home ? '' : u('');
       backdrop-filter 0.3s;
   }
   :global(.site-header.scrolled) {
-    background: rgba(8, 24, 39, 0.78);
+    background: rgba(7, 10, 12, 0.78);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom-color: var(--border);
@@ -93,8 +93,9 @@ const prefix = home ? '' : u('');
     font-family: var(--font-mono);
     font-size: 0.82rem;
     font-weight: 700;
-    background: linear-gradient(140deg, var(--accent), #0a3a66);
-    border: 1px solid rgba(79, 195, 247, 0.4);
+    color: #fff;
+    background: linear-gradient(140deg, var(--accent), #12805c);
+    border: 1px solid rgba(46, 230, 168, 0.4);
   }
   .menu {
     display: flex;
@@ -115,7 +116,7 @@ const prefix = home ? '' : u('');
     text-decoration: none;
   }
   .menu a[data-nav-link][aria-current='true'] {
-    background: rgba(79, 195, 247, 0.1);
+    background: rgba(46, 230, 168, 0.1);
   }
   .cta-mobile,
   .toggle {
@@ -179,7 +180,7 @@ const prefix = home ? '' : u('');
       flex-direction: column;
       gap: 0;
       padding: 1rem var(--gutter) 2rem;
-      background: rgba(8, 24, 39, 0.98);
+      background: rgba(7, 10, 12, 0.98);
       overflow-y: auto;
       visibility: hidden;
       opacity: 0;
