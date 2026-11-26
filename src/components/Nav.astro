@@ -236,4 +236,18 @@ const prefix = home ? '' : u('');
       background: none;
     }
   }
+
+  /* eight links get tight on small laptops: keep everything on one line */
+  .brand,
+  .cta-desktop {
+    white-space: nowrap;
+  }
+  @media (min-width: 1000px) and (max-width: 1150px) {
+    .brand-name {
+      display: none;
+    }
+    .menu {
+      gap: 0;
+    }
+  }
 </style>
