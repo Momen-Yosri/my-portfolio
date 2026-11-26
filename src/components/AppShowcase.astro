@@ -23,16 +23,6 @@ const first = apps[0];
   aria-labelledby={embedded ? undefined : 'apps-title'}
 >
   <div class:list={[{ container: !embedded }]}>
-    {
-      !embedded && (
-        <SectionHeading
-          eyebrow="Built on tech_app_core"
-          title="One core. Many identities."
-          lead="Each of these apps opens with its own brand and runs on the shared Flutter foundation I designed. Pick one to play its splash screen."
-          id="apps-title"
-        />
-      )
-    }
     <div class="stage" data-showcase data-reveal style={`--glow:${first.glow}`}>
       <div class="device-wrap">
         <div class="device">
@@ -49,6 +39,16 @@ const first = apps[0];
       </div>
 
       <div class="side">
+        {
+          !embedded && (
+            <SectionHeading
+              eyebrow="Built on tech_app_core"
+              title="One core. Many identities."
+              lead="Each of these apps opens with its own brand and runs on the shared Flutter foundation I designed. Pick one to play its splash screen."
+              id="apps-title"
+            />
+          )
+        }
         <p class="now mono"><span data-count>01</span> / {String(apps.length).padStart(2, '0')}</p>
         <h3 data-name>{first.name}</h3>
         <div class="progress" aria-hidden="true"><i data-bar></i></div>
@@ -261,6 +261,71 @@ const first = apps[0];
     .picker {
       grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
       margin-top: 1.5rem;
+    }
+  }
+  /* ---- large phone ---- */
+  .side :global(.section-head) {
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+  .side :global(.section-head p) {
+    margin-top: 0.75rem;
+  }
+  .device {
+    padding: 10px;
+    border-radius: 52px;
+  }
+  .device::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    width: 30%;
+    height: 24px;
+    translate: -50% 0;
+    border-radius: 99px;
+    background: #030405;
+  }
+  .screen {
+    aspect-ratio: 9 / 17.5;
+    border-radius: 43px;
+  }
+  video {
+    object-fit: cover;
+  }
+  @media (min-width: 801px) {
+    .stage {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+    .stage .device-wrap {
+      width: clamp(280px, calc((100svh - 150px) * 0.5), 370px);
+      max-width: none;
+    }
+    .embedded .stage .device-wrap {
+      width: 280px;
+    }
+    .picker {
+      grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    }
+    h3 {
+      font-size: 1.8rem;
+    }
+  }
+  .showcase {
+    overflow-x: clip;
+  }
+  @media (max-width: 800px) {
+    /* heading first, then the phone, then the controls */
+    .side {
+      display: contents;
+    }
+    .side :global(.section-head) {
+      order: -1;
+      margin: 0;
+    }
+    .stage .device-wrap {
+      width: min(82vw, 340px);
+      max-width: none;
     }
   }
 </style>
