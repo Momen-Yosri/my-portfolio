@@ -31,7 +31,7 @@ if (hero) {
     front = i;
     const d = cards[i].dataset;
     cards.forEach((c, n) => c.parentElement!.classList.toggle('front', n === i));
-    hero.style.setProperty('--brand', d.glow!);
+    hero.style.setProperty('--primary', d.primary!);
     const name = document.createElement('bdi');
     name.textContent = d.name!;
     name.className = 'in';
@@ -40,6 +40,9 @@ if (hero) {
     const cid = label.getAttributeNames().find((n) => n.startsWith('data-astro-cid'));
     if (cid) name.setAttribute(cid, '');
     label.replaceChildren(name);
+    const giant = document.createElement('bdi');
+    giant.textContent = d.name!;
+    q('[data-giant]').replaceChildren(giant);
     // drop the old video now; the new one loads once the ring stops
     video.pause();
     video.remove();

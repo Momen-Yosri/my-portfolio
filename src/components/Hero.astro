@@ -8,7 +8,7 @@ import { u } from '../utils';
 // Platform apps, plus other apps I worked on.
 const ring = [
   ...brandedApps.map((a) => ({ ...a, file: `apps/${a.slug}` })),
-  { name: 'Qanoni', color: '#0c0c0d', glow: '#a46bd6', file: 'screens/qanoni/splash' },
+  { name: 'Qanoni', color: '#0c0c0d', primary: '#2a1247', glow: '#a46bd6', file: 'screens/qanoni/splash' },
 ];
 // Qanoni sits second so it comes round early.
 ring.splice(1, 0, ring.pop()!);
@@ -18,8 +18,10 @@ const words = profile.headline.split(' ');
 const step = 360 / apps.length;
 ---
 
-<section id="home" class="hero" aria-labelledby="hero-title" data-hero style={`--brand:${first.glow}`}>
+<section id="home" class="hero ink" aria-labelledby="hero-title" data-hero style={`--primary:${first.primary}`}>
   <div class="floor" aria-hidden="true"><i></i></div>
+
+  <p class="giant" aria-hidden="true" data-giant><bdi>{first.name}</bdi></p>
 
   <div class="layout container">
   <div class="head">
@@ -46,7 +48,7 @@ const step = 360 / apps.length;
       {
         apps.map((a, i) => (
           <li style={`--a:${i * step}deg;--c:${a.color}`}>
-            <button type="button" data-card data-name={a.name} data-glow={a.glow} data-video={a.video} aria-label={`Show ${a.name}`}>
+            <button type="button" data-card data-name={a.name} data-primary={a.primary} data-video={a.video} aria-label={`Show ${a.name}`}>
               <img src={a.poster} alt="" width="540" height="960" draggable="false" />
             </button>
           </li>

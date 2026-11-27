@@ -24,7 +24,7 @@ document.querySelectorAll<HTMLElement>('[data-showcase]').forEach((root) => {
     const d = items[index].dataset;
     window.clearTimeout(timer);
     items.forEach((b, n) => b.setAttribute('aria-pressed', String(n === index)));
-    root.style.setProperty('--glow', d.glow!);
+    root.closest<HTMLElement>('.showcase')!.style.setProperty('--primary', d.primary!);
     screen.style.background = d.color!;
     video.poster = d.poster!;
     video.src = d.video!;

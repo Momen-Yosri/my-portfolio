@@ -18,12 +18,13 @@ const first = apps[0];
 
 <section
   id={embedded ? undefined : 'apps'}
-  class:list={['showcase', embedded ? 'embedded' : 'section']}
+  class:list={['showcase', 'ink', embedded ? 'embedded' : 'section']}
   aria-label={embedded ? 'Apps built on tech_app_core' : undefined}
   aria-labelledby={embedded ? undefined : 'apps-title'}
+  style={`--primary:${first.primary}`}
 >
   <div class:list={[{ container: !embedded }]}>
-    <div class="stage" data-showcase data-reveal style={`--glow:${first.glow}`}>
+    <div class="stage" data-showcase data-reveal style="--glow:#ffffff">
       <div class="device-wrap">
         <div class="device">
           <div class="screen" data-screen style={`background:${first.color}`}>
@@ -73,11 +74,11 @@ const first = apps[0];
                   data-video={a.video}
                   data-poster={a.poster}
                   data-color={a.color}
-                  data-glow={a.glow}
+                  data-primary={a.primary}
                   data-app-store={a.links.appStore}
                   data-play-store={a.links.playStore}
                   aria-pressed={i === 0 ? 'true' : 'false'}
-                  style={`--c:${a.color};--g:${a.glow}`}
+                  style={`--c:${a.color};--g:#ffffff`}
                 >
                   <img src={a.poster} alt="" loading="lazy" width="108" height="144" />
                   <span>{a.name}</span>
