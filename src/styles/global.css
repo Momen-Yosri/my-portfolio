@@ -1,16 +1,19 @@
 :root {
-  --bg: #0a0a0a;
-  --bg-dark: #030303;
-  --surface: #0e0e0e;
-  --surface-2: #171717;
-  --accent-2: #ffffff;
-  --accent-3: #a3a3a3;
+  --bg: #f3f1ec;
+  --bg-dark: #f3f1ec;
+  --surface: #ffffff;
+  --surface-2: #e9e6df;
+  --accent-2: #12110f;
+  --accent-3: #75716a;
   --gradient: linear-gradient(100deg, var(--accent-2), var(--accent-3));
-  --text: #ffffff;
-  --text-2: #cdcdcd;
-  --text-3: #8f8f8f;
-  --border: rgba(255, 255, 255, 0.14);
-  --border-strong: rgba(255, 255, 255, 0.26);
+  --text: #12110f;
+  --text-2: #45423c;
+  --text-3: #6f6b63;
+  --border: rgba(18, 17, 15, 0.14);
+  --border-strong: rgba(18, 17, 15, 0.3);
+  --on-accent: #f3f1ec;
+  --font-display: 'Space Grotesk', var(--font-sans);
+  --font-serif: 'Instrument Serif', Georgia, serif;
 
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -33,18 +36,6 @@
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* Black and white site; colour comes only from the apps and projects. */
-:root,
-.section,
-.site-header,
-.pcard,
-.case {
-  --gradient: linear-gradient(100deg, var(--accent-2), color-mix(in srgb, var(--accent-2) 35%, #fff));
-}
-.section[id] {
-  background: radial-gradient(70% 55% at 85% 0%, color-mix(in srgb, var(--accent-2) 10%, transparent), transparent 70%);
-}
-
 *,
 *::before,
 *::after {
@@ -62,12 +53,7 @@ body {
   font-size: 1rem;
   line-height: 1.65;
   color: var(--text-2);
-  background:
-    radial-gradient(900px 520px at 85% -8%, color-mix(in srgb, var(--accent-2) 13%, transparent), transparent 70%),
-    radial-gradient(760px 480px at -5% 38%, color-mix(in srgb, var(--accent-2) 7%, transparent), transparent 70%),
-    radial-gradient(700px 460px at 100% 82%, color-mix(in srgb, var(--accent-2) 7%, transparent), transparent 70%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-dark) 100%);
-  background-attachment: fixed;
+  background: var(--bg);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -144,7 +130,7 @@ ul {
   left: 1rem;
   top: -4rem;
   background: var(--accent-2);
-  color: #050505;
+  color: var(--on-accent);
   padding: 0.6rem 1rem;
   border-radius: var(--radius-sm);
   z-index: 100;
@@ -219,7 +205,7 @@ ul {
   position: relative;
   overflow: hidden;
   background: var(--accent-2);
-  color: #050505;
+  color: var(--on-accent);
   border-color: transparent;
   box-shadow: 0 10px 28px -12px color-mix(in srgb, var(--accent-2) 90%, transparent);
 }
@@ -232,8 +218,8 @@ ul {
   pointer-events: none;
 }
 .btn-primary:hover {
-  background: color-mix(in srgb, var(--accent-2) 82%, #fff);
-  color: #050505;
+  background: color-mix(in srgb, var(--accent-2) 82%, #888);
+  color: var(--on-accent);
   border-color: transparent;
   transform: translateY(-2px);
   box-shadow: 0 16px 34px -12px var(--accent-2);
@@ -261,7 +247,7 @@ ul {
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text-2);
-  background: rgba(5, 5, 5, 0.4);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
 }
 
 /* Cards */

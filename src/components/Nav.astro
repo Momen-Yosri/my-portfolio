@@ -12,15 +12,10 @@ const prefix = home ? '' : u('');
 <header class="site-header">
   <div class="container bar">
     <a class="brand" href={home ? '#home' : u('')} aria-label={`${profile.name}, home`}>
-      <svg class="mark" viewBox="0 0 64 64" width="36" height="36" aria-hidden="true">
-        <rect width="64" height="64" rx="16" fill="#fff"></rect>
-        <path
-          d="M15 47V19L32 35L49 19V47M32 35V48"
-          fill="none"
-          stroke="#050505"
-          stroke-width="6"
-          stroke-linecap="round"
-          stroke-linejoin="round"></path>
+      <svg class="mark" viewBox="0 0 512 512" width="36" height="36" aria-hidden="true">
+        <rect width="512" height="512" rx="128" fill="#12110f"></rect>
+        <path d="M96 120h62v272H96zM354 120h62v272h-62z" fill="#f3f1ec"></path>
+        <path d="M168 120H188L256 208L324 120H344V200L286 274V392H226V274L168 200Z" fill="#8f8a80"></path>
       </svg>
       <span class="brand-name">{profile.name}</span>
     </a>
@@ -63,17 +58,16 @@ const prefix = home ? '' : u('');
     top: 0;
     z-index: 50;
     height: var(--nav-h);
+    /* always solid: links stay readable over the dark and coloured blocks */
+    background: var(--bg);
     border-bottom: 1px solid transparent;
     transition:
-      background 0.3s var(--ease),
       border-color 0.3s var(--ease),
-      backdrop-filter 0.3s;
+      box-shadow 0.3s var(--ease);
   }
   :global(.site-header.scrolled) {
-    background: rgba(5, 5, 5, 0.78);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
     border-bottom-color: var(--border);
+    box-shadow: 0 10px 24px -18px rgba(18, 17, 15, 0.45);
   }
   .bar {
     height: 100%;
@@ -93,7 +87,7 @@ const prefix = home ? '' : u('');
   .brand:hover {
     text-decoration: none;
   }
-  /* joined MY monogram: colours live on the SVG so it is always white */
+  /* MY monogram: M pillars with the Y core; colours live on the SVG */
   .mark {
     flex: none;
     width: 36px;
@@ -182,7 +176,7 @@ const prefix = home ? '' : u('');
       flex-direction: column;
       gap: 0;
       padding: 1rem var(--gutter) 2rem;
-      background: rgba(5, 5, 5, 0.98);
+      background: var(--bg);
       overflow-y: auto;
       visibility: hidden;
       opacity: 0;

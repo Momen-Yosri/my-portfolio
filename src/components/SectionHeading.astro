@@ -6,10 +6,14 @@ interface Props {
   id?: string;
 }
 const { eyebrow, title, lead, id } = Astro.props;
+// the last two words take the section colour, like the hero headline
+const words = title.split(' ');
+const plain = words.slice(0, -2).join(' ');
+const accent = words.slice(-2).join(' ');
 ---
 
 <div class="section-head" data-reveal>
   <span class="eyebrow">{eyebrow}</span>
-  <h2 id={id}>{title}</h2>
+  <h2 id={id}>{plain} <em>{accent}</em></h2>
   {lead && <p>{lead}</p>}
 </div>
