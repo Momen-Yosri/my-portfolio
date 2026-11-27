@@ -29,8 +29,8 @@ export interface Stat { label: string; to?: number; prefix?: string; suffix?: st
 export const snapshot: Stat[] = [
   { to: 4, suffix: '+', label: 'Years building Flutter apps' },
   { text: '4–6', label: 'Developers led' },
-  { to: 13, label: 'Apps live on Google Play' },
-  { to: 11, label: 'Apps on the App Store' },
+  { to: 15, label: 'Apps live on Google Play' },
+  { to: 12, label: 'Apps on the App Store' },
   { to: 9, label: 'Apps powered by my white-label platform' },
   { text: '~6 wks', label: 'NASU, first commit to store launch' },
 ];
