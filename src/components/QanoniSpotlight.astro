@@ -11,7 +11,7 @@ const right = [subjects, course];
 const highlights = ['Study-year paths', 'Subjects', 'Notes & question bank', 'In-app store'];
 ---
 
-<article class="spotlight" data-reveal aria-labelledby="qanoni-title">
+<article class="spotlight ink" data-reveal aria-labelledby="qanoni-title">
   <div class="info">
     {app.logo && <img class="logo" src={u(app.logo)} alt="" width="60" height="60" loading="lazy" />}
     <p class="kicker mono">Spotlight</p>
@@ -38,10 +38,17 @@ const highlights = ['Study-year paths', 'Subjects', 'Notes & question bank', 'In
     </div>
   </div>
 
-  <div class="stage">
-    {left.map((s, i) => <img class={`shot p${i}`} src={u(s.src)} alt={s.alt} loading="lazy" />)}
+  <div class="stage" data-deck>
+    {
+      left.map((s, i) => (
+        <button type="button" class="slot" data-deck-card style={`--o:${i - 2};--d:${2 - i}`} aria-label={`Show ${s.alt}`}>
+          <img class="shot" src={u(s.src)} alt={s.alt} loading="lazy" draggable="false" />
+        </button>
+      ))
+    }
+    <button type="button" class="slot" data-deck-card style="--o:0;--d:0" aria-label="Show the Qanoni splash screen">
     <video
-      class="shot p2"
+      class="shot"
       data-splash
       muted
       loop
@@ -50,11 +57,20 @@ const highlights = ['Study-year paths', 'Subjects', 'Notes & question bank', 'In
       poster={u('screens/qanoni/splash.webp')}
       src={u('screens/qanoni/splash.mp4')}
       aria-label="Qanoni splash screen"></video>
-    {right.map((s, i) => <img class={`shot p${i + 3}`} src={u(s.src)} alt={s.alt} loading="lazy" />)}
+    </button>
+    {
+      right.map((s, i) => (
+        <button type="button" class="slot" data-deck-card style={`--o:${i + 1};--d:${i + 1}`} aria-label={`Show ${s.alt}`}>
+          <img class="shot" src={u(s.src)} alt={s.alt} loading="lazy" draggable="false" />
+        </button>
+      ))
+    }
   </div>
 </article>
 
 <script>
+  import '../scripts/deck';
+
   // play the splash only while visible, and never under reduced motion
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const io = new IntersectionObserver(
@@ -85,8 +101,8 @@ const highlights = ['Study-year paths', 'Subjects', 'Notes & question bank', 'In
     border-radius: 20px;
     overflow: hidden;
     background:
-      radial-gradient(70% 110% at 75% 50%, color-mix(in srgb, var(--q) 30%, transparent), transparent 70%),
-      #0b090e;
+      radial-gradient(70% 110% at 75% 50%, color-mix(in srgb, var(--q) 34%, transparent), transparent 70%),
+      #1d0c33;
   }
   .logo {
     width: 60px;
@@ -133,44 +149,52 @@ const highlights = ['Study-year paths', 'Subjects', 'Notes & question bank', 'In
     position: relative;
     height: calc(var(--w) * 2.17 + 2rem);
   }
-  .shot {
+  .stage {
+    perspective: 1100px;
+    touch-action: pan-y;
+    user-select: none;
+  }
+  .slot {
     position: absolute;
     top: 1rem;
     left: calc(50% - var(--w) / 2);
     width: var(--w);
+    padding: 0;
+    border: 0;
+    border-radius: 18px;
+    background: none;
+    cursor: pointer;
+    z-index: calc(3 - var(--d));
+    transform: translateX(calc(var(--o) * var(--w) * var(--spread, 0.62)))
+      rotate(calc(var(--o) * 4deg)) rotateY(calc(var(--tx, 0) * 22deg)) rotateX(calc(var(--ty, 0) * -12deg))
+      scale(calc(1 - var(--d) * 0.09));
+    filter: brightness(calc(1 - var(--d) * 0.14));
+    transition:
+      transform 0.65s cubic-bezier(0.34, 1.3, 0.5, 1),
+      filter 0.4s;
+  }
+  .slot:hover,
+  .slot:focus-visible {
+    filter: none;
+  }
+  .shot {
+    display: block;
+    width: 100%;
     aspect-ratio: 600 / 1299;
     object-fit: cover;
     border-radius: 18px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     background: #000;
     box-shadow: 0 24px 40px -18px rgba(0, 0, 0, 0.95);
-    transform: translateX(calc(var(--o) * var(--w) * var(--spread, 0.62))) rotate(calc(var(--o) * 4deg))
-      scale(calc(1 - var(--d) * 0.09));
-    transition: transform 0.55s var(--ease);
-    z-index: calc(3 - var(--d));
-  }
-  .p0 {
-    --o: -2;
-    --d: 2;
-  }
-  .p1 {
-    --o: -1;
-    --d: 1;
-  }
-  .p2 {
-    --o: 0;
-    --d: 0;
-  }
-  .p3 {
-    --o: 1;
-    --d: 1;
-  }
-  .p4 {
-    --o: 2;
-    --d: 2;
+    pointer-events: none;
   }
   .stage:hover {
-    --spread: 0.76;
+    --spread: 0.78;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .spotlight:not(:global(.in)) .stage {
+      --spread: 0;
+    }
   }
   @media (max-width: 860px) {
     .spotlight {

@@ -145,7 +145,7 @@ export const projects: Project[] = [
     color: '#29c5f6',
     logo: 'logos/edulens-student-app.webp',
     screenshots: screens['edulens-student-app'],
-    name: 'EduLens Student App',
+    name: 'EduLens',
     short: 'A production education marketplace that I took over, maintained and extended.',
     category: 'Education marketplace',
     platform: 'Flutter · iOS & Android',
