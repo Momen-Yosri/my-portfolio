@@ -5,10 +5,10 @@ import { profile } from '../data/profile';
 import { brandedApps } from '../data/apps';
 import { u } from '../utils';
 
-// Platform apps, plus other apps I worked on (labelled differently: they are not built on the core).
+// Platform apps, plus other apps I worked on.
 const ring = [
-  ...brandedApps.map((a) => ({ ...a, file: `apps/${a.slug}`, source: 'tech_app_core' })),
-  { name: 'Qanoni', color: '#0c0c0d', glow: '#a46bd6', file: 'screens/qanoni/splash', source: 'also my work' },
+  ...brandedApps.map((a) => ({ ...a, file: `apps/${a.slug}` })),
+  { name: 'Qanoni', color: '#0c0c0d', glow: '#a46bd6', file: 'screens/qanoni/splash' },
 ];
 // Qanoni sits second so it comes round early.
 ring.splice(1, 0, ring.pop()!);
@@ -20,7 +20,6 @@ const step = 360 / apps.length;
 
 <section id="home" class="hero" aria-labelledby="hero-title" data-hero style={`--brand:${first.glow}`}>
   <div class="floor" aria-hidden="true"><i></i></div>
-  <p class="giant" aria-hidden="true" data-giant><bdi>{first.name}</bdi></p>
 
   <div class="layout container">
   <div class="head">
@@ -47,7 +46,7 @@ const step = 360 / apps.length;
       {
         apps.map((a, i) => (
           <li style={`--a:${i * step}deg;--c:${a.color}`}>
-            <button type="button" data-card data-name={a.name} data-glow={a.glow} data-source={a.source} data-video={a.video} aria-label={`Show ${a.name}`}>
+            <button type="button" data-card data-name={a.name} data-glow={a.glow} data-video={a.video} aria-label={`Show ${a.name}`}>
               <img src={a.poster} alt="" width="540" height="960" draggable="false" />
             </button>
           </li>
@@ -58,7 +57,9 @@ const step = 360 / apps.length;
 
     <div class="switcher mono">
       <button type="button" data-prev aria-label="Previous app">←</button>
-      <p><span data-source-label>{first.source}</span> → <b data-current><bdi>{first.name}</bdi></b></p>
+      <p>
+        <b data-current><bdi>{first.name}</bdi></b>
+      </p>
       <button type="button" data-next aria-label="Next app">→</button>
       <button type="button" data-pause aria-pressed="false">Pause</button>
     </div>
@@ -92,7 +93,6 @@ const step = 360 / apps.length;
     padding-block: clamp(0.75rem, 2svh, 2rem);
     overflow: hidden;
     text-align: center;
-    transition: --brand 0.7s;
     isolation: isolate;
   }
   .hero {
@@ -123,18 +123,6 @@ const step = 360 / apps.length;
       linear-gradient(color-mix(in srgb, var(--brand) 45%, transparent) 1px, transparent 1px) 0 0 / 100% 56px,
       linear-gradient(90deg, color-mix(in srgb, var(--brand) 45%, transparent) 1px, transparent 1px) 0 0 / 56px 100%;
     opacity: 0.55;
-  }
-  .giant {
-    position: absolute;
-    inset: 46% 0 auto;
-    z-index: -1;
-    font-size: clamp(4rem, 15vw, 13rem);
-    font-weight: 800;
-    line-height: 1;
-    white-space: nowrap;
-    color: transparent;
-    -webkit-text-stroke: 1px color-mix(in srgb, var(--brand) 40%, transparent);
-    pointer-events: none;
   }
   .who {
     display: inline-flex;
@@ -252,9 +240,6 @@ const step = 360 / apps.length;
     min-width: min(21rem, 70vw);
     color: var(--text);
   }
-  .switcher span {
-    color: var(--text-3);
-  }
   .switcher b {
     color: color-mix(in srgb, var(--brand) 78%, #fff);
   }
@@ -314,12 +299,7 @@ const step = 360 / apps.length;
     }
     .floor i {
       animation: travel 2.4s linear infinite;
-    }
-    .giant bdi {
-      display: inline-block;
-    }
-    .giant :global(bdi.in) {
-      animation: sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
     }
     @keyframes slide {
       from {
@@ -339,16 +319,11 @@ const step = 360 / apps.length;
       }
     }
     @keyframes travel {
-      to {
-        background-position:
-          0 56px,
-          0 0;
-      }
-    }
-    @keyframes sweep {
       from {
-        opacity: 0;
-        transform: translateX(18%);
+        transform: rotateX(68deg) translateY(0);
+      }
+      to {
+        transform: rotateX(68deg) translateY(56px);
       }
     }
   }
@@ -417,10 +392,6 @@ const step = 360 / apps.length;
     height: calc(100% - 14px);
     border-radius: calc(var(--w) * 0.16 - 7px);
   }
-  .giant {
-    top: 40%;
-    opacity: 0.6;
-  }
   @media (min-width: 1000px) {
     .hero {
       --w: clamp(220px, 35.5svh, 330px);
@@ -456,11 +427,6 @@ const step = 360 / apps.length;
       justify-content: flex-start;
       margin-top: 1.5rem;
     }
-    .giant {
-      left: 35%;
-      right: 0;
-      overflow: hidden;
-    }
   }
   @media (max-width: 999px) {
     .hero {
@@ -474,6 +440,77 @@ const step = 360 / apps.length;
     .actions .btn {
       padding-inline: 0.85rem;
       white-space: nowrap;
+    }
+  }
+  /* ---- smooth, uncropped carousel ---- */
+  .stage {
+    height: calc(var(--w) * 1.95 + 3rem);
+    overflow: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .ring {
+    transform: translateZ(calc(var(--r) * -1));
+    will-change: transform;
+  }
+  .ring button {
+    box-shadow: none;
+    transition: none;
+  }
+  .ring li:global(.front) button {
+    box-shadow:
+      0 0 0 1px var(--brand),
+      0 0 36px -8px var(--brand);
+  }
+  .head,
+  .dock {
+    position: relative;
+    z-index: 2;
+  }
+  .switcher {
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+  .switcher p {
+    min-width: min(17rem, 48vw);
+    line-height: 1.15;
+    text-align: center;
+  }
+  .switcher p b {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    font-weight: 750;
+    white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .switcher p :global(bdi.in) {
+      display: inline-block;
+      animation: name-in 0.45s var(--ease);
+    }
+    @keyframes name-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+    }
+  }
+  /* keep arrows and name centred under the phone: Pause must not shift them */
+  .switcher [data-pause] {
+    width: 5rem;
+  }
+  @media (min-width: 561px) {
+    .switcher::before {
+      content: '';
+      width: 5rem;
+    }
+  }
+  @media (max-width: 560px) {
+    .switcher {
+      flex-wrap: wrap;
+    }
+    .switcher p {
+      min-width: calc(100vw - 11rem);
     }
   }
 </style>

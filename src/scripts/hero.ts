@@ -32,19 +32,26 @@ if (hero) {
     const d = cards[i].dataset;
     cards.forEach((c, n) => c.parentElement!.classList.toggle('front', n === i));
     hero.style.setProperty('--brand', d.glow!);
-    q('[data-source-label]').textContent = d.source!;
-    for (const s of ['[data-current]', '[data-giant]']) {
-      const name = document.createElement('bdi');
-      name.textContent = d.name!;
-      name.className = 'in';
-      q(s).replaceChildren(name);
-    }
+    const name = document.createElement('bdi');
+    name.textContent = d.name!;
+    name.className = 'in';
+    const label = q('[data-current]');
     // keep the new <bdi> styled by the component's scoped CSS
-    const cid = q('[data-giant]').getAttributeNames().find((n) => n.startsWith('data-astro-cid'));
-    if (cid) q('[data-giant] bdi').setAttribute(cid, '');
+    const cid = label.getAttributeNames().find((n) => n.startsWith('data-astro-cid'));
+    if (cid) name.setAttribute(cid, '');
+    label.replaceChildren(name);
+    // drop the old video now; the new one loads once the ring stops
     video.pause();
-    video.src = d.video!;
-    cards[i].appendChild(video);
+    video.remove();
+  };
+
+  // swapping the video source mid-rotation is what made the ring stutter
+  const attach = () => {
+    const card = cards[front];
+    if (video.parentElement !== card) {
+      video.src = card.dataset.video!;
+      card.appendChild(video);
+    }
     play();
   };
 
@@ -56,22 +63,32 @@ if (hero) {
   };
 
   const draw = () => {
-    ring.style.setProperty('--turn', `${turn}deg`);
+    ring.style.transform = `translateZ(calc(var(--r) * -1)) rotateY(${turn}deg)`;
     cards.forEach((c, i) => {
+      // only the front card and its neighbours are painted
       const facing = Math.cos(((i * step + turn) * Math.PI) / 180);
-      c.parentElement!.style.setProperty('--o', String(Math.max(0.25, facing ** 2)));
+      const o = Math.max(0, Math.min(1, (facing - 0.45) / 0.5));
+      const li = c.parentElement!;
+      li.style.opacity = o.toFixed(3);
+      li.style.visibility = o > 0 ? 'visible' : 'hidden';
     });
     const n = cards.length;
     setFront(((Math.round(-turn / step) % n) + n) % n);
   };
 
+  // fixed-duration easing, so speed does not depend on the frame rate
   const animate = () => {
     cancelAnimationFrame(frame);
-    const tick = () => {
-      turn += (target - turn) * (reduce ? 1 : 0.09);
-      if (Math.abs(target - turn) < 0.05) turn = target;
+    const from = turn;
+    const duration = reduce ? 0 : 650;
+    let start = 0;
+    const tick = (now: number) => {
+      start ||= now;
+      const p = duration ? Math.min(1, (now - start) / duration) : 1;
+      turn = from + (target - from) * (1 - Math.pow(1 - p, 3));
       draw();
-      if (turn !== target) frame = requestAnimationFrame(tick);
+      if (p < 1) frame = requestAnimationFrame(tick);
+      else attach();
     };
     frame = requestAnimationFrame(tick);
   };
@@ -137,6 +154,7 @@ if (hero) {
   }).observe(stage);
 
   draw();
+  attach();
   setPaused(paused);
 }
 
