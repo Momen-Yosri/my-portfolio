@@ -15,11 +15,14 @@ if (hero) {
   video.playsInline = true;
   video.loop = true;
   video.setAttribute('aria-hidden', 'true');
+  // stay see-through until there are frames, so the poster underneath never blanks
+  video.addEventListener('playing', () => (video.style.opacity = ''));
 
   let turn = 0; // current angle
   let target = 0;
   let front = -1;
   let paused = reduce;
+  let ready = document.readyState === 'complete';
   let visible = true;
   let drag: { x: number; from: number; moved: boolean } | null = null;
   let dragged = false;
@@ -51,7 +54,10 @@ if (hero) {
   // swapping the video source mid-rotation is what made the ring stutter
   const attach = () => {
     const card = cards[front];
+    // nothing is downloaded before the page has loaded, or while motion is paused
+    if (!ready || paused) return;
     if (video.parentElement !== card) {
+      video.style.opacity = '0';
       video.src = card.dataset.video!;
       card.appendChild(video);
     }
@@ -114,7 +120,8 @@ if (hero) {
     paused = v;
     pauseBtn.textContent = v ? 'Play' : 'Pause';
     pauseBtn.setAttribute('aria-pressed', String(v));
-    play();
+    if (v) play();
+    else attach();
     schedule();
   };
   pauseBtn.addEventListener('click', () => setPaused(!paused));
@@ -156,9 +163,24 @@ if (hero) {
     schedule();
   }).observe(stage);
 
+  // the grid floor only animates while the hero is on screen
+  const floor = q('.floor i');
+  new IntersectionObserver(([e]) => {
+    floor.style.animationPlayState = e.isIntersecting ? '' : 'paused';
+  }).observe(hero);
+
   draw();
-  attach();
   setPaused(paused);
+  if (!ready) {
+    window.addEventListener(
+      'load',
+      () => {
+        ready = true;
+        attach();
+      },
+      { once: true },
+    );
+  }
 }
 
 export {};

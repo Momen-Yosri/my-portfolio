@@ -49,7 +49,8 @@ const step = 360 / apps.length;
         apps.map((a, i) => (
           <li style={`--a:${i * step}deg;--c:${a.color}`}>
             <button type="button" data-card data-name={a.name} data-primary={a.primary} data-video={a.video} aria-label={`Show ${a.name}`}>
-              <img src={a.poster} alt="" width="540" height="960" draggable="false" />
+              {/* only the front phone and its neighbours are visible at first */}
+              <img src={a.poster} alt="" width="540" height="960" draggable="false" fetchpriority={i < 2 || i === apps.length - 1 ? 'high' : 'low'} />
             </button>
           </li>
         ))

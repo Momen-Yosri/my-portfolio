@@ -1,6 +1,12 @@
 ---
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import headingFont from '@fontsource/space-grotesk/files/space-grotesk-latin-700-normal.woff2?url';
+import serifFont from '@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url';
+import bodyFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import '../styles/global.css';
 import '../styles/theme.css';
 import Nav from '../components/Nav.astro';
@@ -37,11 +43,7 @@ const jsonLd = JSON.stringify({
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f3f1ec" />
     <meta name="color-scheme" content="light" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Instrument+Serif:ital@1&display=swap"
-    />
+    {[headingFont, serifFont, bodyFont].map((href) => <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />)}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={u('favicon.svg')} />
     <link rel="sitemap" href={u('sitemap-index.xml')} />
