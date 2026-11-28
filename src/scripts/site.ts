@@ -99,7 +99,20 @@ const onScroll = () => {
   progress?.style.setProperty('--p', String(max > 0 ? window.scrollY / max : 0));
 };
 onScroll();
-window.addEventListener('scroll', onScroll, { passive: true });
+// at most one update per frame, however often scroll fires
+let scrollQueued = false;
+window.addEventListener(
+  'scroll',
+  () => {
+    if (scrollQueued) return;
+    scrollQueued = true;
+    requestAnimationFrame(() => {
+      scrollQueued = false;
+      onScroll();
+    });
+  },
+  { passive: true },
+);
 
 // Pointer effects: card spotlight (mouse only)
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
